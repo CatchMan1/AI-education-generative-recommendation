@@ -191,7 +191,7 @@ class EmbDataset(data.Dataset):
         # 获取目标item的embedding
         target_emb = self.item_embs[target_id]
         # 转换为tensor
-        seq_embs = torch.FloatTensor(seq_embs)
+        seq_embs = torch.FloatTensor(full_seq_embs)
         target_emb = torch.FloatTensor(target_emb)
         
         return {

@@ -1,0 +1,15 @@
+2026-02-03 14:32:36,544 - INFO - Configuration: {'batch_size': 256, 'infer_size': 96, 'num_epochs': 200, 'lr': 0.0001, 'device': 'cuda', 'num_layers': 4, 'num_decoder_layers': 4, 'd_model': 128, 'd_ff': 1024, 'num_heads': 6, 'd_kv': 64, 'dropout_rate': 0.1, 'vocab_size': 1025, 'pad_token_id': 0, 'eos_token_id': 0, 'feed_forward_proj': 'relu', 'max_len': 20, 'input_emb_dim': 768, 'target_emb_dim': 768, 'mode': 'train', 'log_path': './logs/tiger.log', 'seed': 2025, 'save_path': './ckpt/tiger.pth', 'early_stop': 10, 'topk_list': [5, 10, 20], 'beam_size': 30}
+2026-02-03 14:32:36,582 - INFO - #Embedding parameters: 131200
+#Non-embedding parameters: 2033856
+#Total trainable parameters: 2165056
+
+2026-02-03 14:44:28,388 - INFO - Configuration: {'batch_size': 256, 'infer_size': 96, 'num_epochs': 200, 'lr': 0.0001, 'device': 'cuda', 'num_layers': 4, 'num_decoder_layers': 4, 'd_model': 128, 'd_ff': 1024, 'num_heads': 6, 'd_kv': 64, 'dropout_rate': 0.1, 'vocab_size': 1025, 'pad_token_id': 0, 'eos_token_id': 0, 'feed_forward_proj': 'relu', 'max_len': 20, 'input_emb_dim': 768, 'target_emb_dim': 768, 'mode': 'train', 'log_path': './logs/tiger.log', 'seed': 2025, 'save_path': './ckpt/tiger.pth', 'early_stop': 10, 'topk_list': [5, 10, 20], 'beam_size': 30}
+2026-02-03 14:44:28,418 - INFO - #Embedding parameters: 131200
+#Non-embedding parameters: 2033856
+#Total trainable parameters: 2165056
+
+2026-02-03 14:52:08,150 - INFO - Configuration: {'batch_size': 256, 'infer_size': 96, 'num_epochs': 200, 'lr': 0.0001, 'device': 'cuda', 'num_layers': 4, 'num_decoder_layers': 4, 'd_model': 128, 'd_ff': 1024, 'num_heads': 6, 'd_kv': 64, 'dropout_rate': 0.1, 'vocab_size': 1025, 'pad_token_id': 0, 'eos_token_id': 0, 'feed_forward_proj': 'relu', 'max_len': 20, 'input_emb_dim': 768, 'target_emb_dim': 768, 'mode': 'train', 'log_path': './logs/tiger.log', 'seed': 2025, 'save_path': './ckpt/tiger.pth', 'early_stop': 10, 'topk_list': [5, 10, 20], 'beam_size': 30}
+2026-02-03 14:52:08,185 - INFO - #Embedding parameters: 131200
+#Non-embedding parameters: 2033856
+#Total trainable parameters: 2165056
+
