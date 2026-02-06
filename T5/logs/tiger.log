@@ -13,3 +13,8 @@
 #Non-embedding parameters: 2033856
 #Total trainable parameters: 2165056
 
+2026-02-05 17:05:28,972 - INFO - Configuration: {'rec_path': '../data/user_item_interact.h5', 'course_path': '../data/course_info.h5', 'course_id_map_path': '../data/course_id_map.h5', 'batch_size': 256, 'infer_size': 256, 'num_epochs': 4, 'lr': 0.0001, 'device': 'cuda', 'num_layers': 4, 'd_model': 128, 'd_ff': 1024, 'num_heads': 6, 'd_kv': 64, 'dropout_rate': 0.1, 'feed_forward_proj': 'relu', 'input_emb_dim': 768, 'target_emb_dim': 768, 'temperature': 0.07, 'log_path': './logs/tiger.log', 'seed': 42, 'save_path': './ckpt/tiger.pth', 'early_stop': 10, 'topk_list': [5, 10, 20]}
+2026-02-05 17:05:29,042 - INFO - #Embedding parameters: 4112384
+#Non-embedding parameters: 2033856
+#Total trainable parameters: 6146240
+

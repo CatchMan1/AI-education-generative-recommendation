@@ -12,10 +12,10 @@ class EmbDataset(data.Dataset):
     这里采用user_name代替user_profile作为emb.
     模型的输入数据是[user_profile_emb, item_seq_emb], [target_emb]，通过引入用户的profile增加个性化推荐的效果
     '''
-    def __init__(self):
-        self.rec_path = '../data/recommendation_data.h5'
-        self.course_path = '../data/course_info.h5'
-        self.course_id_map = '../data/course_id_map.h5'
+    def __init__(self, rec_path, course_path, course_id_map):
+        self.rec_path = rec_path
+        self.course_path = course_path
+        self.course_id_map = course_id_map
         self.rec_data, self.item_data, self.course_id_map = self.loading_data()
         self.item_info = self.mapping_id() # {num_id: item_info}
         self.tokenizer, self.model = self.load_plm()
@@ -122,28 +122,28 @@ class EmbDataset(data.Dataset):
     
     def loading_data(self):
         rec_data = []
-        with h5py.File('../data/user_item_interact.h5', 'r') as f1:
+        with h5py.File(self.rec_path, 'r') as f1:
             user_ids = f1['user_id'][:]          # 提取所有 user_id
             user_profile = f1['user_profile'].asstr(encoding='utf-8')[:] # 提取所有 user_profile
             item_lists = f1['item_id_list'][:]    # 提取所有变长数组
             rec_data = list(zip(user_ids, user_profile, item_lists))        
 
         item_data = []
-        with h5py.File('../data/course_info.h5', 'r') as f2:
+        with h5py.File(self.course_path, 'r') as f2:
             item_ids = f2['item_id'].asstr(encoding='utf-8')[:]        # 提取所有 user_id
             item_name = f2['item_name'].asstr(encoding='utf-8')[:]
             item_info = f2['item_info'].asstr(encoding='utf-8')[:]  # 提取所有变长数组
             item_data = list(zip(item_ids, item_name, item_info))
 
         course_id_map = {}
-        with h5py.File('../data/course_id_map.h5', 'r') as f3:
+        with h5py.File(self.course_id_map, 'r') as f3:
             course_id = f3['item_id'].asstr(encoding='utf-8')[:]
             course_num_id = f3['item_num_id'][:]
             course_id_map = dict(zip(course_id, course_num_id))
         
         return rec_data, item_data, course_id_map
 
-    def build_sequence_samples(self, min_seq_len=2, max_seq_len=50):
+    def build_sequence_samples(self, min_seq_len=2, max_seq_len=20):
         samples = []
         user_ids = []
         
