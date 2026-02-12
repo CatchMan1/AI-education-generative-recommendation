@@ -9,6 +9,9 @@ import torch.optim as optim
 from data_vision import EmbDataset
 from torch.utils.data import DataLoader
 import os
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
 
 def collate_emb_batch(batch: List[Dict[str, Any]]):
     seq_lens = [b['seq_len'] for b in batch] # 取出每个样本
@@ -135,13 +138,17 @@ def train(params):
     model.to(device)
     best_val_loss = float('inf')
     early_stop_counter = 0
+    train_losses = []
+    val_losses = []
     
     for epoch in range(params['num_epochs']):
         logging.info(f"Epoch {epoch + 1}/{params['num_epochs']}")
         train_loss = train_one_epoch(model, train_dataloader, optimizer, device)
         logging.info(f"Training loss: {train_loss}")
+        train_losses.append(train_loss)
         val_loss = eval_loss(model, validation_dataloader, device)
         logging.info(f"Validation loss: {val_loss}")
+        val_losses.append(val_loss)
         if val_loss < best_val_loss:
             best_val_loss = val_loss
             early_stop_counter = 0  # Reset early stop counter
@@ -153,3 +160,20 @@ def train(params):
             if early_stop_counter >= params['early_stop']:
                 logging.info("Early stopping triggered.")
                 break
+
+    # 绘制并保存 loss 曲线
+    epochs = list(range(1, len(train_losses) + 1))
+    plt.figure(figsize=(8, 5))
+    plt.plot(epochs, train_losses, marker='o', label='Train Loss')
+    plt.plot(epochs, val_losses, marker='o', label='Val Loss')
+    plt.xlabel('Epoch')
+    plt.ylabel('Loss')
+    plt.grid(True)
+    plt.legend()
+    plt.tight_layout()
+    # 保存路径优先使用 params 中的配置，否则基于 log_path
+    os.makedirs('loss_picture', exist_ok=True)
+    plot_path = params['loss_plot_path']
+    plt.savefig(plot_path, dpi=200)
+    logging.info(f"Loss plot saved to {plot_path}")
+    print(f"Loss plot saved to: {plot_path}")
