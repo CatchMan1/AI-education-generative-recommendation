@@ -38,37 +38,17 @@ class EmbDataset(data.Dataset):
 
     def load_plm(self, model_name='bert-base-uncased'):
         
-        # 检查是否为Windows系统或者bitsandbytes不可用
-        is_windows = platform.system() == "Windows"
-        try:
-            # 尝试导入和使用bitsandbytes（主要用于Linux/CUDA环境）
-            if not is_windows:
-                from transformers import BitsAndBytesConfig
-                bnb_config = BitsAndBytesConfig(
-                    load_in_4bit=True,
-                    bnb_4bit_use_double_quant=True,
-                    bnb_4bit_quant_type="nf4",
-                    bnb_4bit_compute_dtype=torch.bfloat16,
-                )
-                print("✅ 使用量化配置加载模型 (Linux/CUDA优化)")
-                tokenizer = AutoTokenizer.from_pretrained(model_name)
-                model = AutoModel.from_pretrained(model_name, quantization_config=bnb_config)
-            else:
-                raise ImportError("Windows环境，跳过量化配置")
-        except (ImportError, Exception) as e:
-            # 降级方案：不使用量化配置（适用于Windows或bitsandbytes不可用的情况）
-            print(f"⚠️ 量化配置不可用 ({e.__class__.__name__})，使用标准配置")
-            print("✅ 使用标准配置加载模型 (Windows兼容)")
-            # 标准加载方式
-            tokenizer = AutoTokenizer.from_pretrained(model_name)
-            model = AutoModel.from_pretrained(model_name)
-            
-            # 如果有GPU可用，将模型移到GPU
-            if torch.cuda.is_available():
-                print("检测到CUDA，将模型移至GPU")
-                model = model.cuda()
-            else:
-                print("使用CPU运行模型")
+        # 1. 自动检测设备 (如果有显卡就用 cuda，否则用 cpu)
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        print(f"🚀 正在加载模型，当前使用设备: {device}")
+
+        # 2. 加载分词器
+        tokenizer = AutoTokenizer.from_pretrained(model_name)
+
+        # 3. 加载标准模型并直接移动到对应设备
+        model = AutoModel.from_pretrained(model_name).to(device)
+
+        print(f"✅ 模型已成功加载至 {device}")
         
         return tokenizer, model
 
