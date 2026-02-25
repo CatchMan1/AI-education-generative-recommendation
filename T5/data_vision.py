@@ -14,19 +14,20 @@ class EmbDataset(data.Dataset):
     这里采用user_name代替user_profile作为emb.
     模型的输入数据是[user_profile_emb, item_seq_emb], [target_emb]，通过引入用户的profile增加个性化推荐的效果
     '''
-    def __init__(self, rec_path, course_path, course_id_map, item_emb_h5_path: str = None):
+    def __init__(self, rec_path, course_path, course_id_map, item_emb_h5_path, user_emb_h5_path):
         self.rec_path = rec_path
         self.course_path = course_path
         self.course_id_map = course_id_map
         self.item_emb_h5_path = item_emb_h5_path
+        self.user_emb_h5_path = user_emb_h5_path
         self.rec_data, self.item_data, self.course_id_map = self.loading_data()
         self.item_info = self.mapping_id() # {num_id: item_info}
         # self.tokenizer, self.model = self.load_plm()
-        self.item_embs = self.generate_item_embedding()
+        self.item_embs = self.load_item_embeddings_from_h5(self.item_emb_h5_path)
         
         # 生成用户profile的embedding（基于姓名）
         self.user_profile_map = self.extract_user_profiles()
-        self.user_profile_embs = self.generate_user_profile_embedding(self.user_profile_map, self.tokenizer, self.model)
+        self.user_profile_embs = self.load_user_embeddings_from_h5(self.user_emb_h5_path)
         # 构建序列推荐的训练样本
         self.samples, self.sample_user_ids = self.build_sequence_samples()
 
@@ -44,36 +45,21 @@ class EmbDataset(data.Dataset):
             embs = f['item_embs'][:]
         return embs
 
-    def generate_item_embedding(self):
-        embeddings = self.load_item_embeddings_from_h5(self.item_emb_h5_path)
-        print('Item embeddings loaded from h5, shape: ', embeddings.shape)
-        return embeddings
+    # def generate_item_embedding(self):
+    #     embeddings = self.load_item_embeddings_from_h5(self.item_emb_h5_path)
+    #     print('Item embeddings loaded from h5, shape: ', embeddings.shape)
+    #     return embeddings
     
-    def generate_user_profile_embedding(self, user_profile_map, tokenizer, model):
-        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        user_embs = {}
-        sorted_users = sorted(user_profile_map.items(), key=lambda x: x[0])
-        batch_size = 32
-        
-        for start_idx in range(0, len(sorted_users), batch_size):
-            batch_users = sorted_users[start_idx:start_idx + batch_size]
-            user_ids = [u[0] for u in batch_users]
-            user_names = [u[1] for u in batch_users]
-            
-            encoded = tokenizer(user_names, padding=True, max_length=64,
-                              truncation=True, return_tensors='pt').to(device)
-            
-            with torch.no_grad():
-                outputs = model(**encoded)
-                # 使用[CLS] token的embedding作为用户表示
-                user_batch_embs = outputs.last_hidden_state[:, 0, :].cpu().numpy()
-            
-            for user_id, emb in zip(user_ids, user_batch_embs):
-                user_embs[user_id] = emb
-        
-        print(f"User profile embeddings shape: ({len(user_embs)}, {list(user_embs.values())[0].shape[0]})")
-        return user_embs
+    def load_user_embeddings_from_h5(self, h5_path: str):
+        with h5py.File(h5_path, 'r') as f:
+            embs = f['user_embs'][:]
+        return embs
     
+    # def generate_user_embedding(self):
+    #     embeddings = self.load_user_embeddings_from_h5(self.user_emb_h5_path)
+    #     print('User embeddings loaded from h5, shape: ', embeddings.shape)
+    #     return embeddings
+
     def loading_data(self):
         rec_data = []
         with h5py.File(self.rec_path, 'r') as f1:
@@ -135,7 +121,7 @@ class EmbDataset(data.Dataset):
         history_ids, target_id = self.samples[index]
         user_id = self.sample_user_ids[index]
         # 获取用户profile embedding
-        user_emb = self.user_profile_embs[user_id]
+        user_emb = self.user_profile_embs[user_id - 1]
         # 获取历史序列的embeddings
         seq_embs = self.get_sequence_embeddings(history_ids)
         

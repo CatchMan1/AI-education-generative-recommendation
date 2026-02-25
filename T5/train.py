@@ -78,7 +78,8 @@ def build_splits_and_loaders(params):
         params['rec_path'],
         params['course_path'],
         params['course_id_map_path'],
-        item_emb_h5_path=params.get('item_emb_h5_path')
+        item_emb_h5_path=params.get('item_emb_h5_path'),
+        user_emb_h5_path=params.get('user_emb_h5_path')
     )
     n_total = len(full_dataset)
     n_train = int(n_total * 0.8)
