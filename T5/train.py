@@ -74,7 +74,12 @@ def set_seed(seed):
         torch.cuda.manual_seed_all(seed)
 
 def build_splits_and_loaders(params):
-    full_dataset = EmbDataset(params['rec_path'], params['course_path'], params['course_id_map_path'])
+    full_dataset = EmbDataset(
+        params['rec_path'],
+        params['course_path'],
+        params['course_id_map_path'],
+        item_emb_h5_path=params.get('item_emb_h5_path')
+    )
     n_total = len(full_dataset)
     n_train = int(n_total * 0.8)
     n_valid = int(n_total * 0.1)

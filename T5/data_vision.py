@@ -5,21 +5,24 @@ import numpy as np
 import h5py
 import platform
 import sys
+import os
 from transformers import AutoModel, AutoTokenizer
+
 class EmbDataset(data.Dataset):
     '''
     目前数据集暂无user_profile字段
     这里采用user_name代替user_profile作为emb.
     模型的输入数据是[user_profile_emb, item_seq_emb], [target_emb]，通过引入用户的profile增加个性化推荐的效果
     '''
-    def __init__(self, rec_path, course_path, course_id_map):
+    def __init__(self, rec_path, course_path, course_id_map, item_emb_h5_path: str = None):
         self.rec_path = rec_path
         self.course_path = course_path
         self.course_id_map = course_id_map
+        self.item_emb_h5_path = item_emb_h5_path
         self.rec_data, self.item_data, self.course_id_map = self.loading_data()
         self.item_info = self.mapping_id() # {num_id: item_info}
-        self.tokenizer, self.model = self.load_plm()
-        self.item_embs = self.generate_item_embedding(self.item_info, self.tokenizer, self.model)
+        # self.tokenizer, self.model = self.load_plm()
+        self.item_embs = self.generate_item_embedding()
         
         # 生成用户profile的embedding（基于姓名）
         self.user_profile_map = self.extract_user_profiles()
@@ -36,43 +39,14 @@ class EmbDataset(data.Dataset):
                     break
         return item_info
 
-    def load_plm(self, model_name='bert-base-uncased'):
-        
-        # 1. 自动检测设备 (如果有显卡就用 cuda，否则用 cpu)
-        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        print(f"🚀 正在加载模型，当前使用设备: {device}")
+    def load_item_embeddings_from_h5(self, h5_path: str):
+        with h5py.File(h5_path, 'r') as f:
+            embs = f['item_embs'][:]
+        return embs
 
-        # 2. 加载分词器
-        tokenizer = AutoTokenizer.from_pretrained(model_name)
-
-        # 3. 加载标准模型并直接移动到对应设备
-        model = AutoModel.from_pretrained(model_name).to(device)
-
-        print(f"✅ 模型已成功加载至 {device}")
-        
-        return tokenizer, model
-
-    def generate_item_embedding(self, item_text_dic, tokenizer, model):
-        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        max_item_id = max(item_text_dic.keys())
-        order_texts = ["" if k == 0 else item_text_dic.get(k, "") for k in range(max_item_id + 1)]
-        embeddings = []
-        start, batch_size = 0, 20
-        
-        while start < len(order_texts):
-            sentences = order_texts[start: start + batch_size]
-            encoded_sentences = tokenizer(sentences, padding=True, max_length=512,
-                                        truncation=True, return_tensors='pt').to(device)
-            outputs = model(**encoded_sentences)
-            # 计算平均池化嵌入
-            masked_output = outputs.last_hidden_state * encoded_sentences['attention_mask'].unsqueeze(-1)
-            mean_output = masked_output[:,1:,:].sum(dim=1) / encoded_sentences['attention_mask'][:,1:].sum(dim=-1, keepdim=True)
-            mean_output = mean_output.detach()
-            embeddings.append(mean_output)
-            start += batch_size
-        
-        embeddings = torch.cat(embeddings, dim=0).cpu().numpy()
-        print('Item embeddings shape: ', embeddings.shape)
+    def generate_item_embedding(self):
+        embeddings = self.load_item_embeddings_from_h5(self.item_emb_h5_path)
+        print('Item embeddings loaded from h5, shape: ', embeddings.shape)
         return embeddings
     
     def generate_user_profile_embedding(self, user_profile_map, tokenizer, model):
