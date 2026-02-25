@@ -1,10 +1,15 @@
 from train import train
 from evaluate import infer
+from item_encode import encode
 
 params = {
         'rec_path' : '../data/user_item_interact.h5',
         'course_path': '../data/course_info.h5',
         'course_id_map_path' : '../data/course_id_map.h5',
+        'item_emb_h5_path': '../data/course_item_embs.h5',
+        'encode_model': 'bert-base-uncased',
+        'encode_batch_size':20,
+        'encode_max_len':512,
         'batch_size':256,
         'infer_size':256,
         'num_epochs':30,
@@ -28,6 +33,7 @@ params = {
         'loss_plot_path':'./loss_picture/task1.png'
     }
 def main():
+    encode(params)
     train(params)
     infer(params)
 if __name__ == "__main__":
