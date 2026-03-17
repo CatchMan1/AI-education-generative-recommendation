@@ -11,12 +11,15 @@ class EmbDataset(data.Dataset):
     def __init__(self, h5_path):
 
         self.h5_path = h5_path
-        with h5py.File(self.h5_path, 'r') as f:
-            self.embeddings = f['item_embs'][:]
-            meta_raw = f['meta'][()]
-            self.meta = json.loads(meta_raw.decode('utf-8'))
+        self.embeddings, self.meta = self._load_data()
         self.dim = self.embeddings.shape[-1]
         print(f"[RQ-VAE] Loaded {len(self.embeddings)} embeddings from {h5_path}, dim={self.dim}")
+    def _load_data(self):
+        with h5py.File(self.h5_path, 'r') as f:
+            embeddings = f['item_embs'][:]
+            meta_raw = f['meta'][()]
+            meta = json.loads(meta_raw.decode('utf-8'))
+        return embeddings, meta
 
     def __getitem__(self, index):
         emb = self.embeddings[index]

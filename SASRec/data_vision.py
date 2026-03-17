@@ -5,36 +5,44 @@ from collections import defaultdict
 
 
 class SASRecDataset(Dataset):
-    def __init__(self, h5_path, max_len=50, mode='train'):
+    def __init__(self, h5_path, max_len=50, mode='train', params=None):
         self.max_len = max_len
         self.mode = mode
-        with h5py.File(h5_path, "r") as f:
-            student_ids = f["interactions/student_ids"][:].astype(str)
-            class_ids = f["interactions/class_ids"][:].astype(int)
-            record_ids = f["interactions/record_ids"][:]
-
-        # 构建物品映射
-        unique_classes = sorted(list(set(class_ids)))
-        self.class2idx = {cid: i + 1 for i, cid in enumerate(unique_classes)}  # 0为padding
-        self.item_num = len(unique_classes)
-
+        self.h5_path = h5_path
+        self.params = params or {}
+        self.rec_data = self._load_data()
+        
         # 按用户构建时序序列 (S_u = (s_1, s_2, ..., s_{|S_u|}))
         user_hist = defaultdict(list)
-        for s, c, r in zip(student_ids, class_ids, record_ids):
-            user_hist[s].append((r, self.class2idx[c]))
+        for user_id, user_name, item_sequence in self.rec_data:
+            # item_sequence 已经是按时间排序的物品序列
+            user_hist[user_id].extend(item_sequence)
 
         self.user_seqs = []
         for user_id, items in user_hist.items():
-            # 按时间排序
-            items = [x[1] for x in sorted(items, key=lambda x: x[0])]
-            if len(items) < 3: continue  # 过滤过短序列
+            if len(items) < self.params.get('min_seq_len', 3): continue  # 过滤过短序列
 
             if self.mode == 'train':
-                # 训练集：取所有历史 (论文训练时用前t步预测t+1步)
-                self.user_seqs.append(items[:-2])
+                # 训练集：留一法，去掉最后一个物品作为测试目标
+                train_seq = items[:-1]  # 前|S_u|-1个物品用于训练
+                self.user_seqs.append(train_seq)
             elif self.mode == 'test':
-                # 测试集：完整序列 (论文测试时用前|S_u|-1步预测最后1步)
+                # 测试集：完整序列，用于预测最后一个物品
                 self.user_seqs.append(items)
+        
+        # 计算物品总数（用于模型初始化）
+        all_items = set()
+        for items in user_hist.values():
+            all_items.update(items)
+        self.item_num = max(all_items) if all_items else 0  # 取最大物品ID作为总数
+
+    def _load_data(self):
+        with h5py.File(self.h5_path, 'r') as f:
+            user_ids = f['user_id'][:]          # 提取所有 user_id
+            user_profile = f['user_profile'].asstr(encoding='utf-8')[:] # 提取所有 user_profile
+            item_lists = f['item_id_list'][:]    # 提取所有变长数组
+            rec_data = list(zip(user_ids, user_profile, item_lists))
+        return rec_data
 
     def __len__(self):
         return len(self.user_seqs)
@@ -44,40 +52,35 @@ class SASRecDataset(Dataset):
         n = self.max_len
 
         if self.mode == 'train':
-            # 输入序列s = S^u[:-1]，截断/ padding到长度n
-            input_seq = seq[:-1]  # S_1^u, S_2^u, ..., S_{|S^u|-1}^u
-            # 构建输入序列s（固定长度n）
-            if len(input_seq) >= n:
-                s = input_seq[-n:]  # 截断：取最近n个
-            else:
-                s = [0] * (n - len(input_seq)) + input_seq  # padding：前面补0
+            # 假设 n 是 max_len
+            # 1. 提取原始的输入和目标片段（保持相对偏移 1）
+            # 如果原始序列 seq = [s1, s2, s3, s4]，n=10
+            raw_input = seq[:-1]   # [s1, s2, s3]
+            raw_target = seq[1:]   # [s2, s3, s4]
 
-            # 构建目标序列o_t
-            o_t = []
-            for t in range(n):
-                s_t = s[t]
-                # 1. s_t是padding项（0）→ o_t = <pad>（0）
-                if s_t == 0:
-                    o_t.append(0)
-                # 2. 1 ≤ t < n → o_t = s_{t+1}
-                elif 1 <= t < n:
-                    if t + 1 < len(s):
-                        o_t.append(s[t + 1])
-                    else:
-                        # t+1超出input_seq长度 → 取原序列最后一个物品S_{|S^u|}
-                        o_t.append(seq[-1])
-                # 3. t = n → o_t = S_{|S^u|}
-                elif t == n:
-                    o_t.append(seq[-1])
+            # 2. 统一截断（只取最近的 n 个）
+            raw_input = raw_input[-n:]
+            raw_target = raw_target[-n:]
+
+            # 3. 统一前补 0 (Pre-padding)
+            pad_len = n - len(raw_input)
+            
+            s = [0] * pad_len + raw_input
+            o_t = [0] * pad_len + raw_target
 
             return torch.tensor(s).long(), torch.tensor(o_t).long()
 
         elif self.mode == 'test':
-            # 测试集：输入s = 完整序列[:-1]，目标为最后一个物品
-            input_seq = seq[:-1]
+            # 测试集：输入完整历史，预测最后一个物品
+            if len(seq) < 2:
+                return torch.zeros(n, dtype=torch.long), torch.tensor(0, dtype=torch.long)
+            
+            input_seq = seq[:-1]  # 除最后一个外的所有物品
+            target = seq[-1]      # 最后一个物品作为预测目标
+            
             if len(input_seq) >= n:
                 s = input_seq[-n:]
             else:
                 s = [0] * (n - len(input_seq)) + input_seq
-            target = seq[-1]
+            
             return torch.tensor(s).long(), torch.tensor(target).long()

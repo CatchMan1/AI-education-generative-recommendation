@@ -62,7 +62,7 @@ class VectorQuantizer(nn.Module):
 
     def forward(self, x, use_sk=True):
         # Flatten input
-        latent = x.view(-1, self.e_dim)
+        latent = x.view(-1, self.e_dim) # latend.shape = (batch_size, 64) 假设706个物品
 
         if not self.initted and self.training:
             self.init_emb(latent)
@@ -70,21 +70,21 @@ class VectorQuantizer(nn.Module):
         # Calculate the L2 Norm between latent and Embedded weights
         d = torch.sum(latent**2, dim=1, keepdim=True) + \
             torch.sum(self.embedding.weight**2, dim=1, keepdim=True).t()- \
-            2 * torch.matmul(latent, self.embedding.weight.t())
+            2 * torch.matmul(latent, self.embedding.weight.t()) # d.shape = (batch_size, 256)
         if not use_sk or self.sk_epsilon <= 0:
             indices = torch.argmin(d, dim=-1)
         else:
-            d = self.center_distance_for_constraint(d)
+            d = self.center_distance_for_constraint(d) # 中心化
             d = d.double()
             Q = sinkhorn_algorithm(d, self.sk_epsilon, self.sk_iters)
 
             if torch.isnan(Q).any() or torch.isinf(Q).any():
                 print(f"Sinkhorn Algorithm returns nan/inf values.")
-            indices = torch.argmax(Q, dim=-1)
+            indices = torch.argmax(Q, dim=-1) #返回概率最大的码本indice
 
         # indices = torch.argmin(d, dim=-1)
 
-        x_q = self.embedding(indices).view(x.shape)
+        x_q = self.embedding(indices).view(x.shape) # x对应的码本索引和嵌入(batch_size, 64)
 
         # compute loss for embedding
         commitment_loss = F.mse_loss(x_q.detach(), x)
@@ -92,7 +92,7 @@ class VectorQuantizer(nn.Module):
         loss = codebook_loss + self.beta * commitment_loss
 
         # preserve gradients
-        x_q = x + (x_q - x).detach()
+        x_q = x + (x_q - x).detach() #无法直接反向传播x_q，因为其是通过indice查找出来的
 
         indices = indices.view(x.shape[:-1])
 

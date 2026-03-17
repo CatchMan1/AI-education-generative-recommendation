@@ -22,7 +22,7 @@ class MLPLayers(nn.Module):
             mlp_modules.append(nn.Dropout(p=self.dropout))
             mlp_modules.append(nn.Linear(input_size, output_size))
 
-            if self.use_bn and idx != (len(self.layers)-2):
+            if self.use_bn and idx != (len(self.layers)-2): # batch normalize
                 mlp_modules.append(nn.BatchNorm1d(num_features=output_size))
 
             activation_func = activation_layer(self.activation, output_size)
@@ -30,7 +30,7 @@ class MLPLayers(nn.Module):
                 mlp_modules.append(activation_func)
 
         self.mlp_layers = nn.Sequential(*mlp_modules)
-        self.apply(self.init_weights)
+        self.apply(self.init_weights)# 动态传递module进行权重的初始化
 
     def init_weights(self, module):
         # We just initialize the module with normal distribution as the paper said

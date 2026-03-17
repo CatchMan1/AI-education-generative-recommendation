@@ -9,7 +9,7 @@ from .rq import ResidualVectorQuantizer
 class RQVAE(nn.Module):
     def __init__(self,
                  in_dim=768,
-                 # num_emb_list=[256,256,256,256],
+                 # num_emb_list=[32,32,32,32],
                  num_emb_list=None,
                  e_dim=64,
                  # layers=[512,256,128],
@@ -53,7 +53,7 @@ class RQVAE(nn.Module):
                                           sk_epsilons=self.sk_epsilons,
                                           sk_iters=self.sk_iters,)
 
-        self.decode_layer_dims = self.encode_layer_dims[::-1]
+        self.decode_layer_dims = self.encode_layer_dims[::-1] # 反转列表
         self.decoder = MLPLayers(layers=self.decode_layer_dims,
                                        dropout=self.dropout_prob,bn=self.bn)
 
@@ -79,6 +79,6 @@ class RQVAE(nn.Module):
         else:
             raise ValueError('incompatible loss type')
 
-        loss_total = loss_recon + self.quant_loss_weight * quant_loss
+        loss_total = loss_recon + self.quant_loss_weight * quant_loss # 残差损失+encode-decode损失
 
         return loss_total, loss_recon

@@ -1,5 +1,5 @@
-from train import train
-from evaluate import infer
+# from train import train
+# from evaluate import infer
 from item_encode import encode
 
 params = {
@@ -35,7 +35,7 @@ params = {
     }
 def main():
     encode(params)
-    train(params)
-    infer(params)
+    # train(params)
+    # infer(params)
 if __name__ == "__main__":
     main()

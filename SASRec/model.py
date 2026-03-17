@@ -8,6 +8,11 @@ class SASRec(nn.Module):
         self.item_num = item_num
         self.dev = params['device']
         self.d = params['d']
+        self.mlp_layer = params['mlp_layer']
+        self.dropout = params['dropout']
+        self.layernorm_eps = params['layernorm_eps']
+        self.num_blocks = params['num_blocks']
+        self.num_heads = params['num_heads']
 
         # 1. M ∈ R^{|I|×d}
         self.item_emb = nn.Embedding(item_num + 1, self.d, padding_idx=0)
@@ -21,25 +26,25 @@ class SASRec(nn.Module):
 
         # Pre-Norm结构 + 多层堆叠
         self.attention_layernorms = nn.ModuleList(
-            [nn.LayerNorm(self.d, eps=1e-8) for _ in range(params['num_blocks'])])
+            [nn.LayerNorm(self.d, eps=self.layernorm_eps) for _ in range(self.num_blocks)])
         self.attention_layers = nn.ModuleList(
-            [nn.MultiheadAttention(self.d, params['num_heads'], params['dropout'], batch_first=True) for _ in
-             range(params['num_blocks'])])
+            [nn.MultiheadAttention(self.d, self.num_heads, self.dropout, batch_first=True) for _ in
+             range(self.num_blocks)])
         self.forward_layernorms = nn.ModuleList(
-            [nn.LayerNorm(self.d, eps=1e-8) for _ in range(params['num_blocks'])])
+            [nn.LayerNorm(self.d, eps=self.layernorm_eps) for _ in range(self.num_blocks)])
 
         # 4. Feed Forward Network (F_i = ReLU(S_iW1 + b1)W2 + b2)
         self.forward_layers = nn.ModuleList([
             nn.Sequential(
-                nn.Linear(self.d, 4 * self.d),
+                nn.Linear(self.d, self.mlp_layer),
                 nn.ReLU(),
-                nn.Dropout(params['dropout']),
-                nn.Linear(4 * self.d, self.d),
-                nn.Dropout(params['dropout'])
-            ) for _ in range(params['num_blocks'])
+                nn.Dropout(self.dropout),
+                nn.Linear(self.mlp_layer, self.d),
+                nn.Dropout(self.dropout)
+            ) for _ in range(self.num_blocks)
         ])
 
-        self.last_layernorm = nn.LayerNorm(self.d, eps=1e-8)
+        self.last_layernorm = nn.LayerNorm(self.d, eps=self.layernorm_eps)
 
     def forward(self, log_seqs):
         """

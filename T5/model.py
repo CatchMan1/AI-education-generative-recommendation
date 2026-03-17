@@ -46,20 +46,21 @@ class TIGER(nn.Module):
       return (loss_i2t + loss_t2i) / 2.0
 
     def forward(self, seq_embs: torch.Tensor, attention_mask: Optional[torch.Tensor] = None, target_emb: Optional[torch.Tensor] = None):
+        inputs_embeds = self.input_proj(seq_embs)
+        outputs = self.model(
+            inputs_embeds=inputs_embeds,
+            attention_mask=attention_mask,
+        )
+        
+        hidden = outputs.last_hidden_state
+        pooled = hidden[:, 0, :]
+        pred_emb = self.output_proj(pooled)
+        loss = None
+        if target_emb is not None:
+            loss = self.compute_contrastive_loss(pred_emb, target_emb)
+        pred_emb_norm = F.normalize(pred_emb, p=2, dim=1, eps=self.cosine_eps)
 
-      inputs_embeds = self.input_proj(seq_embs)
-      outputs = self.model(
-          inputs_embeds=inputs_embeds,
-          attention_mask=attention_mask,
-      )
-      hidden = outputs.last_hidden_state
-      pooled = hidden[:, 0, :]
-      pred_emb = self.output_proj(pooled)
-      loss = None
-      if target_emb is not None:
-          loss = self.compute_contrastive_loss(pred_emb, target_emb)
-      pred_emb_norm = F.normalize(pred_emb, p=2, dim=1, eps=self.cosine_eps)
-      return loss, pred_emb_norm
+        return loss, pred_emb_norm
     
     def generate(self, seq_embs: torch.Tensor, attention_mask: Optional[torch.Tensor] = None, **kwargs):
         _, pred_emb = self.forward(seq_embs=seq_embs, attention_mask=attention_mask, target_emb=None)

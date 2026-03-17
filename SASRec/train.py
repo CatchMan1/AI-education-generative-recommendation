@@ -26,13 +26,13 @@ def get_neg_samples(seq, item_num, num_neg=1):
 
 def train(params):
     device = torch.device(params['device'])
-    dataset = SASRecDataset(params["data_path"], max_len=params["max_len"], mode='train')
-    num_workers = 0 if device.type == 'cpu' and 'win' in sys.platform.lower() else 4
+    dataset = SASRecDataset(params["data_path"], max_len=params["max_len"], mode='train', params=params)
+    num_workers = 0 if device.type == 'cpu' and 'win' in sys.platform.lower() else params.get('num_workers', 4)
     dataloader = DataLoader(dataset, batch_size=params["batch_size"], shuffle=True, num_workers=num_workers)
 
     item_num = dataset.item_num
     model = SASRec(item_num, params).to(device)
-    optimizer = torch.optim.Adam(model.parameters(), lr=params["lr"], betas=(0.9, 0.98))
+    optimizer = torch.optim.Adam(model.parameters(), lr=params["lr"], betas=params.get('adam_betas', (0.9, 0.98)))
 
     model.train()
     for epoch in range(1, params["epochs"] + 1):
@@ -57,7 +57,7 @@ def train(params):
             score_matrix = torch.matmul(seq_features, item_emb_weight.t())
 
             # 3. 生成负样本（每个时间步t随机选1个j∉S^u）
-            neg_samples = get_neg_samples(input_seqs, item_num, num_neg=1)  # [B, 1]
+            neg_samples = get_neg_samples(input_seqs, item_num, num_neg=params.get('num_neg_samples', 1))  # [B, 1]
 
             # 4. 计算BCE Loss
             # 生成mask，过滤padding位置（o_t=0的位置）
@@ -73,8 +73,8 @@ def train(params):
             neg_scores = torch.gather(score_matrix, dim=2, index=neg_samples_expanded.unsqueeze(-1)).squeeze(-1)
 
             # 计算正负样本的BCE Loss
-            pos_loss = -torch.log(torch.sigmoid(pos_scores) + 1e-24) * mask
-            neg_loss = -torch.log(1 - torch.sigmoid(neg_scores) + 1e-24) * mask
+            pos_loss = -torch.log(torch.sigmoid(pos_scores) + params.get('loss_eps', 1e-24)) * mask
+            neg_loss = -torch.log(1 - torch.sigmoid(neg_scores) + params.get('loss_eps', 1e-24)) * mask
 
             # 计算batch总loss和有效时间步数
             batch_loss = (pos_loss + neg_loss).sum()
