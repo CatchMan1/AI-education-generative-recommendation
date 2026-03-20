@@ -1,0 +1,6 @@
+2026-03-20 16:32:36,956 - INFO - Configuration: {'code_path': '../data/course/course_rqvae_codes.npy', 'train_dataset_path': '../data/tiger/train_dataset.h5', 'val_dataset_path': '../data/tiger/val_dataset.h5', 'test_dataset_path': '../data/tiger/test_dataset.h5', 'batch_size': 256, 'infer_size': 256, 'num_epochs': 10, 'lr': 0.0001, 'device': 'cuda', 'num_layers': 2, 'num_decoder_layers': 2, 'd_model': 64, 'd_ff': 256, 'num_heads': 4, 'd_kv': 8, 'dropout_rate': 0.1, 'vocab_size': 64, 'codebook_size': 8, 'pad_token_id': 0, 'eos_token_id': 31, 'feed_forward_proj': 'relu', 'max_len': 20, 'log_path': './logs/tiger.log', 'seed': 42, 'save_path': './ckpt/tiger.pth', 'early_stop': 10, 'topk_list': [5, 10, 20], 'loss_plot_path': './loss_picture/task1.png', 'beam_size': 5}
+2026-03-20 16:32:36,997 - INFO - #Embedding parameters: 4096
+#Non-embedding parameters: 181248
+#Total trainable parameters: 185344
+
+2026-03-20 16:36:04,932 - INFO - Epoch 1/10, Training loss: 2.0204
