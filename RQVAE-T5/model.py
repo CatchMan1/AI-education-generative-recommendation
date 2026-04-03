@@ -2,27 +2,26 @@
 import torch
 import torch.nn as nn
 from typing import Dict, Any, Optional
-from transformers import T5Config, T5ForConditionalGeneration
+from transformers import T5ForConditionalGeneration, T5Config
 
 class TIGER(nn.Module):
     def __init__(self, config: Dict[str, Any]):
         super(TIGER, self).__init__()
-        t5config = T5Config(
-        num_layers=config['num_layers'],
-        num_decoder_layers=config['num_decoder_layers'],
-        d_model=config['d_model'],
-        d_ff=config['d_ff'],
-        num_heads=config['num_heads'],
-        d_kv=config['d_kv'],
-        dropout_rate=config['dropout_rate'],
-        vocab_size=config['vocab_size'],
-        pad_token_id=config['pad_token_id'],
-        eos_token_id=config['eos_token_id'],
-        decoder_start_token_id=config['pad_token_id'],
-        feed_forward_proj=config['feed_forward_proj'],
-    )
-        # Initialize T5 model with the specified configuration
-        self.model = T5ForConditionalGeneration(t5config)
+        t5_config = T5Config(
+            vocab_size=config['vocab_size'],
+            num_layers=config['num_layers'],
+            num_decoder_layers=config['num_decoder_layers'],
+            d_model=config['d_model'],
+            d_ff=config['d_ff'],
+            num_heads=config['num_heads'],
+            d_kv=config['d_kv'],
+            dropout_rate=config['dropout_rate'],
+            feed_forward_proj=config['feed_forward_proj'],
+            pad_token_id=config['pad_token_id'],
+            eos_token_id=config['eos_token_id'],
+            decoder_start_token_id=config['pad_token_id'],
+        )
+        self.model = T5ForConditionalGeneration(t5_config)
     
     @property
     def n_parameters(self):

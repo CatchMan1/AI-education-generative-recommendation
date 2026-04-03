@@ -44,7 +44,8 @@ def infer(params):
         dataset_path=params['test_dataset_path'],
         code_path=params['code_path'],
         max_len=params['max_len'],
-        codebook_size = params['codebook_size']
+        codebook_size=params['codebook_size'],
+        prof_h5_paths=params.get('prof_h5_paths', None),
     )
     test_dataloader = GenRecDataLoader(test_dataset, batch_size=params['infer_size'], shuffle=False)
     logging.info(f"测试集大小: {len(test_dataset)}")

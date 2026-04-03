@@ -1,6 +1,91 @@
-2026-03-20 16:32:36,956 - INFO - Configuration: {'code_path': '../data/course/course_rqvae_codes.npy', 'train_dataset_path': '../data/tiger/train_dataset.h5', 'val_dataset_path': '../data/tiger/val_dataset.h5', 'test_dataset_path': '../data/tiger/test_dataset.h5', 'batch_size': 256, 'infer_size': 256, 'num_epochs': 10, 'lr': 0.0001, 'device': 'cuda', 'num_layers': 2, 'num_decoder_layers': 2, 'd_model': 64, 'd_ff': 256, 'num_heads': 4, 'd_kv': 8, 'dropout_rate': 0.1, 'vocab_size': 64, 'codebook_size': 8, 'pad_token_id': 0, 'eos_token_id': 31, 'feed_forward_proj': 'relu', 'max_len': 20, 'log_path': './logs/tiger.log', 'seed': 42, 'save_path': './ckpt/tiger.pth', 'early_stop': 10, 'topk_list': [5, 10, 20], 'loss_plot_path': './loss_picture/task1.png', 'beam_size': 5}
-2026-03-20 16:32:36,997 - INFO - #Embedding parameters: 4096
-#Non-embedding parameters: 181248
-#Total trainable parameters: 185344
+2026-04-03 09:49:02,024 - INFO - Configuration: {'code_path': '../data/course/course_rqvae_codes.npy', 'train_dataset_path': '../data/tiger/train_dataset.h5', 'val_dataset_path': '../data/tiger/val_dataset.h5', 'test_dataset_path': '../data/tiger/test_dataset.h5', 'batch_size': 256, 'infer_size': 256, 'num_epochs': 50, 'lr': 0.0001, 'device': 'cuda:1', 'num_layers': 6, 'num_decoder_layers': 6, 'd_model': 512, 'd_ff': 2048, 'num_heads': 8, 'd_kv': 64, 'dropout_rate': 0.1, 'vocab_size': 64, 'codebook_size': 8, 'pad_token_id': 0, 'eos_token_id': 31, 'feed_forward_proj': 'relu', 'max_len': 20, 'pretrained_path': '../pretrained/t5-small', 'log_path': './logs/tiger.log', 'seed': 42, 'save_path': './ckpt/tiger.pth', 'early_stop': 10, 'topk_list': [2, 5, 10], 'loss_plot_path': './loss_picture/task1.png', 'beam_size': 5}
+2026-04-03 09:49:02,614 - INFO - #Embedding parameters: 32768
+#Non-embedding parameters: 44057088
+#Total trainable parameters: 44089856
 
-2026-03-20 16:36:04,932 - INFO - Epoch 1/10, Training loss: 2.0204
+2026-04-03 09:49:03,724 - INFO - 使用设备: cuda:0
+2026-04-03 12:11:52,392 - INFO - Configuration: {'code_path': '../data/course/course_rqvae_codes.npy', 'train_dataset_path': '../data/tiger/train_dataset.h5', 'test_dataset_path': '../data/tiger/test_dataset.h5', 'batch_size': 256, 'infer_size': 256, 'num_epochs': 50, 'lr': 0.0001, 'device': 'cuda:1', 'num_layers': 2, 'num_decoder_layers': 2, 'd_model': 64, 'd_ff': 256, 'num_heads': 4, 'd_kv': 16, 'dropout_rate': 0.1, 'vocab_size': 64, 'codebook_size': 8, 'pad_token_id': 0, 'eos_token_id': 31, 'feed_forward_proj': 'relu', 'max_len': 20, 'log_path': './logs/tiger.log', 'seed': 42, 'save_path': './ckpt/tiger.pth', 'early_stop': 10, 'topk_list': [2, 5, 10], 'loss_plot_path': './loss_picture/task1.png', 'beam_size': 5}
+2026-04-03 12:11:52,422 - INFO - #Embedding parameters: 4096
+#Non-embedding parameters: 230400
+#Total trainable parameters: 234496
+
+2026-04-03 12:11:53,572 - INFO - 使用设备: cuda:0
+2026-04-03 12:26:34,835 - INFO - Configuration: {'code_path': '../data/course/course_rqvae_codes.npy', 'train_dataset_path': '../data/tiger/train_dataset.h5', 'test_dataset_path': '../data/tiger/test_dataset.h5', 'batch_size': 256, 'infer_size': 256, 'num_epochs': 50, 'lr': 0.0001, 'device': 'cuda:0', 'num_layers': 2, 'num_decoder_layers': 2, 'd_model': 64, 'd_ff': 256, 'num_heads': 4, 'd_kv': 16, 'dropout_rate': 0.1, 'vocab_size': 64, 'codebook_size': 8, 'pad_token_id': 0, 'eos_token_id': 31, 'feed_forward_proj': 'relu', 'max_len': 20, 'log_path': './logs/tiger.log', 'seed': 42, 'save_path': './ckpt/tiger.pth', 'early_stop': 10, 'topk_list': [2, 5, 10], 'loss_plot_path': './loss_picture/task1.png', 'beam_size': 5}
+2026-04-03 12:26:34,846 - INFO - #Embedding parameters: 4096
+#Non-embedding parameters: 230400
+#Total trainable parameters: 234496
+
+2026-04-03 12:26:35,901 - INFO - 使用设备: cuda:0
+2026-04-03 12:29:10,193 - INFO - Epoch 1/50, Training loss: 1.9680
+2026-04-03 12:39:25,389 - INFO - Configuration: {'code_path': '../data/course/course_rqvae_codes.npy', 'train_dataset_path': '../data/tiger/train_dataset.h5', 'test_dataset_path': '../data/tiger/test_dataset.h5', 'batch_size': 256, 'infer_size': 256, 'num_epochs': 50, 'lr': 0.0001, 'device': 'cuda:0', 'num_layers': 2, 'num_decoder_layers': 2, 'd_model': 64, 'd_ff': 256, 'num_heads': 4, 'd_kv': 16, 'dropout_rate': 0.1, 'vocab_size': 64, 'codebook_size': 8, 'pad_token_id': 0, 'eos_token_id': 31, 'feed_forward_proj': 'relu', 'max_len': 20, 'log_path': './logs/tiger.log', 'seed': 42, 'save_path': './ckpt/tiger.pth', 'early_stop': 5, 'topk_list': [2, 5], 'loss_plot_path': './loss_picture/task1.png', 'beam_size': 5, 'eval_freq': 2}
+2026-04-03 12:39:25,399 - INFO - #Embedding parameters: 4096
+#Non-embedding parameters: 230400
+#Total trainable parameters: 234496
+
+2026-04-03 12:39:26,456 - INFO - 使用设备: cuda:0
+2026-04-03 12:41:57,465 - INFO - Epoch 1/50, Training loss: 1.9411
+2026-04-03 12:44:16,795 - INFO - Epoch 2/50, Training loss: 1.5140
+2026-04-03 12:55:16,140 - INFO - Test: {'Recall@2': 0.13371867456800496, 'Recall@5': 0.21330401541080934} | {'NDCG@2': 0.11832515449929813, 'NDCG@5': 0.1541221738660623}
+2026-04-03 12:55:16,160 - INFO - Best model saved (NDCG=0.1541) to ./ckpt/tiger.pth
+2026-04-03 12:57:34,399 - INFO - Epoch 3/50, Training loss: 1.4300
+2026-04-03 12:59:51,878 - INFO - Epoch 4/50, Training loss: 1.3888
+2026-04-03 13:12:19,606 - INFO - Test: {'Recall@2': 0.15538988260417458, 'Recall@5': 0.2390247441169084} | {'NDCG@2': 0.13579237179446157, 'NDCG@5': 0.1735010525416433}
+2026-04-03 13:12:19,628 - INFO - Best model saved (NDCG=0.1735) to ./ckpt/tiger.pth
+2026-04-03 13:14:51,408 - INFO - Epoch 5/50, Training loss: 1.3641
+2026-04-03 13:17:22,360 - INFO - Epoch 6/50, Training loss: 1.3470
+2026-04-03 13:29:28,747 - INFO - Test: {'Recall@2': 0.16436148772450618, 'Recall@5': 0.2512080682186914} | {'NDCG@2': 0.14459267795964795, 'NDCG@5': 0.18371616519648012}
+2026-04-03 13:29:28,768 - INFO - Best model saved (NDCG=0.1837) to ./ckpt/tiger.pth
+2026-04-03 13:31:50,667 - INFO - Epoch 7/50, Training loss: 1.3344
+2026-04-03 13:34:13,418 - INFO - Epoch 8/50, Training loss: 1.3236
+2026-04-03 13:46:07,540 - INFO - Test: {'Recall@2': 0.16999235889067918, 'Recall@5': 0.25666090662294033} | {'NDCG@2': 0.15025701981047843, 'NDCG@5': 0.18949229232267784}
+2026-04-03 13:46:07,553 - INFO - Best model saved (NDCG=0.1895) to ./ckpt/tiger.pth
+2026-04-03 13:48:41,759 - INFO - Epoch 9/50, Training loss: 1.3153
+2026-04-03 13:51:09,542 - INFO - Epoch 10/50, Training loss: 1.3072
+2026-04-03 14:03:36,085 - INFO - Test: {'Recall@2': 0.17779104175900007, 'Recall@5': 0.26435108095327586} | {'NDCG@2': 0.15604832081308953, 'NDCG@5': 0.1952299077573155}
+2026-04-03 14:03:36,096 - INFO - Best model saved (NDCG=0.1952) to ./ckpt/tiger.pth
+2026-04-03 14:06:06,156 - INFO - Epoch 11/50, Training loss: 1.3010
+2026-04-03 14:08:33,159 - INFO - Epoch 12/50, Training loss: 1.2947
+2026-04-03 14:20:41,275 - INFO - Test: {'Recall@2': 0.18182987058610123, 'Recall@5': 0.26965374010178106} | {'NDCG@2': 0.15985787434168858, 'NDCG@5': 0.199517247783914}
+2026-04-03 14:20:41,328 - INFO - Best model saved (NDCG=0.1995) to ./ckpt/tiger.pth
+2026-04-03 14:23:11,698 - INFO - Epoch 13/50, Training loss: 1.2897
+2026-04-03 14:25:43,598 - INFO - Epoch 14/50, Training loss: 1.2842
+2026-04-03 14:37:23,443 - INFO - Test: {'Recall@2': 0.18407455382334323, 'Recall@5': 0.2739017999683564} | {'NDCG@2': 0.1631009871334876, 'NDCG@5': 0.20371641913783453}
+2026-04-03 14:37:23,478 - INFO - Best model saved (NDCG=0.2037) to ./ckpt/tiger.pth
+2026-04-03 14:39:38,397 - INFO - Epoch 15/50, Training loss: 1.2797
+2026-04-03 14:41:50,601 - INFO - Epoch 16/50, Training loss: 1.2764
+2026-04-03 14:52:57,486 - INFO - Test: {'Recall@2': 0.18785156964776342, 'Recall@5': 0.277609510731761} | {'NDCG@2': 0.16609215396818464, 'NDCG@5': 0.20668703037995756}
+2026-04-03 14:52:57,522 - INFO - Best model saved (NDCG=0.2067) to ./ckpt/tiger.pth
+2026-04-03 14:55:13,121 - INFO - Epoch 17/50, Training loss: 1.2720
+2026-04-03 14:57:27,459 - INFO - Epoch 18/50, Training loss: 1.2686
+2026-04-03 15:08:36,636 - INFO - Test: {'Recall@2': 0.1907072229855182, 'Recall@5': 0.28108616808464315} | {'NDCG@2': 0.16899287305153088, 'NDCG@5': 0.20973962289718137}
+2026-04-03 15:08:36,673 - INFO - Best model saved (NDCG=0.2097) to ./ckpt/tiger.pth
+2026-04-03 15:10:54,901 - INFO - Epoch 19/50, Training loss: 1.2653
+2026-04-03 15:13:38,455 - INFO - Epoch 20/50, Training loss: 1.2619
+2026-04-03 15:25:39,380 - INFO - Test: {'Recall@2': 0.1946101283739463, 'Recall@5': 0.28505168931094316} | {'NDCG@2': 0.17238558585138808, 'NDCG@5': 0.21324745016347307}
+2026-04-03 15:25:39,440 - INFO - Best model saved (NDCG=0.2132) to ./ckpt/tiger.pth
+2026-04-03 15:27:59,399 - INFO - Epoch 21/50, Training loss: 1.2588
+2026-04-03 15:30:13,225 - INFO - Epoch 22/50, Training loss: 1.2559
+2026-04-03 15:41:20,524 - INFO - Test: {'Recall@2': 0.19785639028446925, 'Recall@5': 0.2894644034931551} | {'NDCG@2': 0.17493489548444108, 'NDCG@5': 0.21630647119344398}
+2026-04-03 15:41:20,539 - INFO - Best model saved (NDCG=0.2163) to ./ckpt/tiger.pth
+2026-04-03 15:43:33,408 - INFO - Epoch 23/50, Training loss: 1.2533
+2026-04-03 15:45:50,140 - INFO - Epoch 24/50, Training loss: 1.2510
+2026-04-03 15:56:29,081 - INFO - Test: {'Recall@2': 0.1997276267321436, 'Recall@5': 0.2917543215022969} | {'NDCG@2': 0.1772350769180395, 'NDCG@5': 0.2188276567823446}
+2026-04-03 15:56:29,091 - INFO - Best model saved (NDCG=0.2188) to ./ckpt/tiger.pth
+2026-04-03 15:58:45,915 - INFO - Epoch 25/50, Training loss: 1.2480
+2026-04-03 16:01:05,978 - INFO - Epoch 26/50, Training loss: 1.2455
+2026-04-03 16:12:39,172 - INFO - Test: {'Recall@2': 0.2013613398688728, 'Recall@5': 0.29493818693761853} | {'NDCG@2': 0.17891911722859494, 'NDCG@5': 0.22120341974193225}
+2026-04-03 16:12:39,218 - INFO - Best model saved (NDCG=0.2212) to ./ckpt/tiger.pth
+2026-04-03 16:15:00,518 - INFO - Epoch 27/50, Training loss: 1.2435
+2026-04-03 16:17:18,115 - INFO - Epoch 28/50, Training loss: 1.2418
+2026-04-03 16:28:20,862 - INFO - Test: {'Recall@2': 0.20508621241547786, 'Recall@5': 0.2974097016829268} | {'NDCG@2': 0.18200361762625283, 'NDCG@5': 0.22367495254441178}
+2026-04-03 16:28:20,878 - INFO - Best model saved (NDCG=0.2237) to ./ckpt/tiger.pth
+2026-04-03 16:30:41,335 - INFO - Epoch 29/50, Training loss: 1.2396
+2026-04-03 16:33:00,495 - INFO - Epoch 30/50, Training loss: 1.2374
+2026-04-03 16:43:53,502 - INFO - Test: {'Recall@2': 0.20690130300560203, 'Recall@5': 0.3001289929365664} | {'NDCG@2': 0.18387282054481813, 'NDCG@5': 0.22595155990155708}
+2026-04-03 16:43:53,551 - INFO - Best model saved (NDCG=0.2260) to ./ckpt/tiger.pth
+2026-04-03 16:46:08,937 - INFO - Epoch 31/50, Training loss: 1.2360
+2026-04-03 16:48:25,078 - INFO - Epoch 32/50, Training loss: 1.2338
+2026-04-03 17:00:04,455 - INFO - Test: {'Recall@2': 0.2084686170873949, 'Recall@5': 0.30175914209905325} | {'NDCG@2': 0.18548914634350477, 'NDCG@5': 0.2276535399318061}
+2026-04-03 17:00:04,503 - INFO - Best model saved (NDCG=0.2277) to ./ckpt/tiger.pth
+2026-04-03 17:02:30,246 - INFO - Epoch 33/50, Training loss: 1.2324
+2026-04-03 17:04:50,462 - INFO - Epoch 34/50, Training loss: 1.2305

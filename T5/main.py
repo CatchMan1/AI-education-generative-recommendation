@@ -1,5 +1,5 @@
-# from train import train
-# from evaluate import infer
+from train import train
+from evaluate import infer
 from item_encode import encode
 
 params = {
@@ -13,12 +13,12 @@ params = {
         'encode_max_len':512,
         'batch_size':256,
         'infer_size':256,
-        'num_epochs':3,
+        'num_epochs':50,
         'lr':1e-4,
         'device':'cuda',
-        'num_layers':2, # encoder 层数
-        'd_model':256, # encoder 隐藏层状态
-        'd_ff':512,
+        'num_layers':6, # encoder 层数 (t5-small)
+        'd_model':512, # encoder 隐藏层状态 (t5-small)
+        'd_ff':2048,
         'num_heads':8,
         'd_kv':64,
         'dropout_rate':0.3,
@@ -26,16 +26,17 @@ params = {
         'input_emb_dim':768, # Bert embedding dimension
         'target_emb_dim':768,
         'temperature':0.07, # infoNCE temperature
+        'pretrained_path':'../pretrained/t5-small',
         'log_path':'./logs/tiger.log',
         'seed':42,
         'save_path':'./ckpt/tiger.pth',
         'early_stop':10,
-        'topk_list':[5,10,20],
+        'topk_list':[2,5,10],
         'loss_plot_path':'./loss_picture/task1.png'
     }
 def main():
     encode(params)
-    # train(params)
-    # infer(params)
+    train(params)
+    infer(params)
 if __name__ == "__main__":
     main()

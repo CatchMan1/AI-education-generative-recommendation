@@ -71,7 +71,7 @@ def item2code(code_path, codebook_size):
     return item_to_code, code_to_item
 
 class GenRecDataset(Dataset):
-    def __init__(self, dataset_path, code_path, max_len, PAD_TOKEN=0, codebook_size=8):
+    def __init__(self, dataset_path, code_path, max_len, PAD_TOKEN=0, codebook_size=8, prof_h5_paths=None):
         """
         Initialize the GenRecDataset.
         Args:
@@ -79,27 +79,48 @@ class GenRecDataset(Dataset):
             code_path (str): Path to the item-to-code mapping file.
             max_len (int): Maximum length for padding or truncation.
             PAD_TOKEN (int, optional): Token used for padding. Defaults to 0.
+            prof_h5_paths (dict, optional): Dict mapping level names to H5 file paths,
+                e.g. {'prof_lvl1': '...h5', 'prof_lvl2': '...h5', 'prof_lvl3': '...h5'}.
         """
         self.dataset_path = dataset_path
         self.code_path = code_path
         self.codebook_size = codebook_size
         self.max_len = max_len
         self.PAD_TOKEN = PAD_TOKEN
+        self.prof_h5_paths = prof_h5_paths
         # Load item-to-code mapping
         self.item_to_code, self.code_to_item = item2code(code_path, codebook_size)
         # Process the dataset
         self.data = self._prepare_data()
+        # Load professional BERT embeddings: {level: np.ndarray (N, 5, 768)}
+        self.prof_embeddings = self._load_prof_embeddings()
         
+    def _load_prof_embeddings(self):
+        """
+        Load professional hierarchy BERT embeddings from H5 files.
+        Returns:
+            dict or None: {level_name: np.ndarray of shape (N, 5, 768)}
+        """
+        if self.prof_h5_paths is None:
+            return None
+        prof_data = {}
+        for level, path in self.prof_h5_paths.items():
+            with h5py.File(path, 'r') as f:
+                key = list(f.keys())[0]
+                prof_data[level] = f[key][:]  # (N, 5, 768)
+        return prof_data
+
     def _prepare_data(self):
         """
         Process the dataset and convert items to codes.
         Returns:
             list: Processed data with items converted to codes.
         """
-        # history and target are already stored as semantic codes in the H5 file
+        # Process the data using the process_data function
         processed_data = process_data(
             self.dataset_path, self.max_len, self.PAD_TOKEN
         )
+        # history and target are already stored as semantic codes in the H5 file
         return processed_data
     
     def __getitem__(self, index):
@@ -108,9 +129,15 @@ class GenRecDataset(Dataset):
         Args:
             index (int): Index of the data item.
         Returns:
-            dict: A dictionary containing 'history' and 'target'.
+            dict: A dictionary containing 'history', 'target', and optionally
+                  'prof_lvl1', 'prof_lvl2', 'prof_lvl3' of shape (5, 768).
         """
-        return self.data[index]
+        item = dict(self.data[index])
+        if self.prof_embeddings is not None:
+            item['prof_lvl1'] = self.prof_embeddings['prof_lvl1'][index]  # (5, 768)
+            item['prof_lvl2'] = self.prof_embeddings['prof_lvl2'][index]  # (5, 768)
+            item['prof_lvl3'] = self.prof_embeddings['prof_lvl3'][index]  # (5, 768)
+        return item
     
     def __len__(self):
         """
@@ -165,4 +192,10 @@ class GenRecDataLoader(DataLoader):
             [torch.tensor([1 if elem != pad_token else 0 for elem in h], dtype=torch.int64) for h in flattened_histories]
         )
 
-        return {'history': flattened_histories, 'target': flattened_targets, 'attention_mask': attention_masks}
+        result = {'history': flattened_histories, 'target': flattened_targets, 'attention_mask': attention_masks}
+
+        result['prof_lvl1'] = torch.stack([torch.tensor(item['prof_lvl1'], dtype=torch.float32) for item in batch])  # (B, 5, 768)
+        result['prof_lvl2'] = torch.stack([torch.tensor(item['prof_lvl2'], dtype=torch.float32) for item in batch])  # (B, 5, 768)
+        result['prof_lvl3'] = torch.stack([torch.tensor(item['prof_lvl3'], dtype=torch.float32) for item in batch])  # (B, 5, 768)
+
+        return result

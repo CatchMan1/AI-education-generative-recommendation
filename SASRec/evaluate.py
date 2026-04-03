@@ -11,7 +11,7 @@ def evaluate(params):
     dataloader = DataLoader(dataset, batch_size=params["eval_batch_size"], shuffle=False)
 
     model = SASRec(dataset.item_num, params).to(device)
-
+    model.load_state_dict(torch.load(params["ckpt"], map_location=device))
     model.eval()
     HT, NDCG = [], []
 

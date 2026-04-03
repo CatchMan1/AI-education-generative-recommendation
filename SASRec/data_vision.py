@@ -23,11 +23,12 @@ class SASRecDataset(Dataset):
             if len(items) < self.params.get('min_seq_len', 3): continue  # 过滤过短序列
 
             if self.mode == 'train':
-                # 训练集：留一法，去掉最后一个物品作为测试目标
+                # 训练集：去掉最后一个物品（测试目标），剩余做并行训练
                 train_seq = items[:-1]  # 前|S_u|-1个物品用于训练
-                self.user_seqs.append(train_seq)
+                if len(train_seq) >= 1:
+                    self.user_seqs.append(train_seq)
             elif self.mode == 'test':
-                # 测试集：完整序列，用于预测最后一个物品
+                # 测试集：留一法，预测最后一个物品
                 self.user_seqs.append(items)
         
         # 计算物品总数（用于模型初始化）

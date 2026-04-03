@@ -38,3 +38,4 @@ Thumbs.db
 # 数据文件夹（根据需要）
 data/MOOCCube/
 data/user_profile_embs.h5
+pretrained/

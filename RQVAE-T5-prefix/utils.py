@@ -58,11 +58,22 @@ def evaluate_model(model, eval_loader, topk_list, beam_size, device):
             labels = batch['target'].to(device)
             batch_size = input_ids.shape[0]
 
+            prof_lvl1 = batch.get('prof_lvl1', None)
+            prof_lvl2 = batch.get('prof_lvl2', None)
+            prof_lvl3 = batch.get('prof_lvl3', None)
+            if prof_lvl1 is not None:
+                prof_lvl1 = prof_lvl1.to(device)
+                prof_lvl2 = prof_lvl2.to(device)
+                prof_lvl3 = prof_lvl3.to(device)
+
             # 只生成一次，并获取所有序列
             preds = model.generate(
-                input_ids=input_ids, 
-                attention_mask=attention_mask, 
-                num_beams=actual_beam_size, 
+                input_ids=input_ids,
+                attention_mask=attention_mask,
+                num_beams=actual_beam_size,
+                prof_lvl1=prof_lvl1,
+                prof_lvl2=prof_lvl2,
+                prof_lvl3=prof_lvl3,
             )
             
             # 移除起始 token 并 reshape
@@ -90,7 +101,7 @@ def evaluate_model(model, eval_loader, topk_list, beam_size, device):
     avg_ndcgs = {k: sum(v) / len(v) for k, v in ndcgs.items()}
     return avg_recalls, avg_ndcgs
 
-def plot_training_curves(train_losses, val_metrics=None, save_path=None, show_plot=True):
+def plot_training_curves(train_losses, val_losses=None, val_metrics=None, save_path=None, show_plot=True):
     """
     绘制训练曲线图
     
@@ -145,6 +156,8 @@ def plot_training_curves(train_losses, val_metrics=None, save_path=None, show_pl
         plt.xlabel('Epoch')
         plt.ylabel('Loss')
         plt.grid(True, alpha=0.3)
+        if val_losses:
+            plt.plot(val_losses, 'r-', linewidth=2, label='Val Loss')
         plt.legend()
     
     plt.tight_layout()

@@ -1,23 +1,14 @@
 import torch
-from transformers import T5Config, T5EncoderModel
+from transformers import T5EncoderModel
 from typing import Optional, Dict, Any
 import torch.nn as nn
 import torch.nn.functional as F
 class TIGER(nn.Module):
     def __init__(self, params: Dict[str, Any]):
         super(TIGER, self).__init__()
-        t5config = T5Config(
-        num_layers=params['num_layers'],
-        d_model=params['d_model'],
-        d_ff=params['d_ff'],
-        num_heads=params['num_heads'],
-        d_kv=params['d_kv'],
-        dropout_rate=params['dropout_rate'],
-        feed_forward_proj=params['feed_forward_proj'],
-    )
-        self.model = T5EncoderModel(t5config)
-        self.input_proj = nn.Linear(params['input_emb_dim'], params['d_model'])
-        self.output_proj = nn.Linear(params['d_model'], params['target_emb_dim'])
+        self.model = T5EncoderModel.from_pretrained(params.get('pretrained_path', 't5-small'))
+        self.input_proj = nn.Linear(params['input_emb_dim'], self.model.config.d_model)
+        self.output_proj = nn.Linear(self.model.config.d_model, params['target_emb_dim'])
         self.cosine_eps = 1e-8
         self.temperature = float(params.get('temperature', 0.07))
     
@@ -53,7 +44,11 @@ class TIGER(nn.Module):
         )
         
         hidden = outputs.last_hidden_state
-        pooled = hidden[:, 0, :]
+        if attention_mask is not None:
+            mask = attention_mask.unsqueeze(-1).float()
+            pooled = (hidden * mask).sum(dim=1) / mask.sum(dim=1).clamp(min=1e-9)
+        else:
+            pooled = hidden.mean(dim=1)
         pred_emb = self.output_proj(pooled)
         loss = None
         if target_emb is not None:

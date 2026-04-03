@@ -14,12 +14,13 @@ class EmbDataset(data.Dataset):
     这里采用user_name代替user_profile作为emb.
     模型的输入数据是[user_profile_emb, item_seq_emb], [target_emb]，通过引入用户的profile增加个性化推荐的效果
     '''
-    def __init__(self, rec_path, course_path, course_id_map, item_emb_h5_path, user_emb_h5_path):
+    def __init__(self, rec_path, course_path, course_id_map, item_emb_h5_path, user_emb_h5_path, mode='train'):
         self.rec_path = rec_path
         self.course_path = course_path
         self.course_id_map = course_id_map
         self.item_emb_h5_path = item_emb_h5_path
         self.user_emb_h5_path = user_emb_h5_path
+        self.mode = mode
         self.rec_data, self.item_data, self.course_id_map = self.loading_data()
         self.item_info = self.mapping_id() # {num_id: item_info}
         # self.tokenizer, self.model = self.load_plm()
@@ -29,7 +30,7 @@ class EmbDataset(data.Dataset):
         self.user_profile_map = self.extract_user_profiles()
         self.user_profile_embs = self.load_user_embeddings_from_h5(self.user_emb_h5_path)
         # 构建序列推荐的训练样本
-        self.samples, self.sample_user_ids = self.build_sequence_samples()
+        self.samples, self.sample_user_ids = self.build_sequence_samples(mode=self.mode)
 
     def mapping_id(self):
         item_info = {}
@@ -83,7 +84,7 @@ class EmbDataset(data.Dataset):
         
         return rec_data, item_data, course_id_map
 
-    def build_sequence_samples(self, min_seq_len=2, max_seq_len=20):
+    def build_sequence_samples(self, mode='train', min_seq_len=2, max_seq_len=20):
         samples = []
         user_ids = []
         
@@ -94,14 +95,20 @@ class EmbDataset(data.Dataset):
             if len(item_list) < min_seq_len:
                 continue
             
-            # 滑动窗口生成多个训练样本
-            for i in range(1, len(item_list)):
-                history = item_list[max(0, i-max_seq_len):i]
-
-                target = item_list[i]
-                
+            if mode == 'train':
+                # 滑动窗口：排除最后一个（测试目标），T5双向注意力需要逐样本构造
+                train_items = item_list[:-1]
+                for i in range(1, len(train_items)):
+                    history = train_items[max(0, i - max_seq_len):i]
+                    target = train_items[i]
+                    samples.append((history, target))
+                    user_ids.append(user_id)
+            elif mode == 'test':
+                # 留一法：输入最后一个之前的历史，预测最后一个物品
+                history = item_list[max(0, len(item_list) - 1 - max_seq_len):len(item_list) - 1]
+                target = item_list[-1]
                 samples.append((history, target))
-                user_ids.append(user_id)  # 保存对应的user_id
+                user_ids.append(user_id)
         
         return samples, user_ids
 

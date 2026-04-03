@@ -1,30 +1,123 @@
-2026-02-03 14:32:36,544 - INFO - Configuration: {'batch_size': 256, 'infer_size': 96, 'num_epochs': 200, 'lr': 0.0001, 'device': 'cuda', 'num_layers': 4, 'num_decoder_layers': 4, 'd_model': 128, 'd_ff': 1024, 'num_heads': 6, 'd_kv': 64, 'dropout_rate': 0.1, 'vocab_size': 1025, 'pad_token_id': 0, 'eos_token_id': 0, 'feed_forward_proj': 'relu', 'max_len': 20, 'input_emb_dim': 768, 'target_emb_dim': 768, 'mode': 'train', 'log_path': './logs/tiger.log', 'seed': 2025, 'save_path': './ckpt/tiger.pth', 'early_stop': 10, 'topk_list': [5, 10, 20], 'beam_size': 30}
-2026-02-03 14:32:36,582 - INFO - #Embedding parameters: 131200
-#Non-embedding parameters: 2033856
-#Total trainable parameters: 2165056
+#Non-embedding parameters: 1968640
+#Total trainable parameters: 10193408
 
-2026-02-03 14:44:28,388 - INFO - Configuration: {'batch_size': 256, 'infer_size': 96, 'num_epochs': 200, 'lr': 0.0001, 'device': 'cuda', 'num_layers': 4, 'num_decoder_layers': 4, 'd_model': 128, 'd_ff': 1024, 'num_heads': 6, 'd_kv': 64, 'dropout_rate': 0.1, 'vocab_size': 1025, 'pad_token_id': 0, 'eos_token_id': 0, 'feed_forward_proj': 'relu', 'max_len': 20, 'input_emb_dim': 768, 'target_emb_dim': 768, 'mode': 'train', 'log_path': './logs/tiger.log', 'seed': 2025, 'save_path': './ckpt/tiger.pth', 'early_stop': 10, 'topk_list': [5, 10, 20], 'beam_size': 30}
-2026-02-03 14:44:28,418 - INFO - #Embedding parameters: 131200
-#Non-embedding parameters: 2033856
-#Total trainable parameters: 2165056
+2026-04-02 13:13:01,053 - INFO - Epoch 1/50
+2026-04-02 13:14:14,283 - INFO - Training loss: 5.442096582304562
+2026-04-02 13:14:41,068 - INFO - Test: {'Recall@2': 0.015029575498786604, 'Recall@5': 0.0401131063891008, 'Recall@10': 0.09378526284238646} | {'NDCG@2': 0.013937673597824933, 'NDCG@5': 0.02525072181429977, 'NDCG@10': 0.0426214132936186}
+2026-04-02 13:14:41,152 - INFO - Best model saved (Recall@10=0.0938) to D:\Visual Studio Code\AI-educationRec-model\T5\ckpt\tiger.pth
+2026-04-02 13:14:41,152 - INFO - Epoch 2/50
+2026-04-02 13:15:54,631 - INFO - Training loss: 5.38763743794576
+2026-04-02 13:16:20,683 - INFO - Test: {'Recall@2': 0.04806099631207898, 'Recall@5': 0.07978736826329849, 'Recall@10': 0.14326291977976652} | {'NDCG@2': 0.03835184439007714, 'NDCG@5': 0.05300455639409009, 'NDCG@10': 0.07328352001190798}
+2026-04-02 13:16:20,778 - INFO - Best model saved (Recall@10=0.1433) to D:\Visual Studio Code\AI-educationRec-model\T5\ckpt\tiger.pth
+2026-04-02 13:16:20,778 - INFO - Epoch 3/50
+2026-04-02 13:17:32,711 - INFO - Training loss: 5.371455925204108
+2026-04-02 13:17:58,801 - INFO - Test: {'Recall@2': 0.057914374039935206, 'Recall@5': 0.1142618159580598, 'Recall@10': 0.1636102297110184} | {'NDCG@2': 0.04527559373121283, 'NDCG@5': 0.0703564330466828, 'NDCG@10': 0.08596156206608431}
+2026-04-02 13:17:58,873 - INFO - Best model saved (Recall@10=0.1636) to D:\Visual Studio Code\AI-educationRec-model\T5\ckpt\tiger.pth
+2026-04-02 13:17:58,873 - INFO - Epoch 4/50
+2026-04-02 13:19:12,128 - INFO - Training loss: 5.361812172227888
+2026-04-02 13:19:37,636 - INFO - Test: {'Recall@2': 0.05891224791670029, 'Recall@5': 0.10450241857223853, 'Recall@10': 0.1574725532026744} | {'NDCG@2': 0.0480043321264494, 'NDCG@5': 0.06908106990397665, 'NDCG@10': 0.08548318586086279}
+2026-04-02 13:19:37,636 - INFO - Epoch 5/50
+2026-04-02 13:20:48,955 - INFO - Training loss: 5.355623439236013
+2026-04-02 13:21:16,985 - INFO - Test: {'Recall@2': 0.07004560229867046, 'Recall@5': 0.12893908649721256, 'Recall@10': 0.1855835127662174} | {'NDCG@2': 0.05583141448600301, 'NDCG@5': 0.08242118310312405, 'NDCG@10': 0.10016880193976291}
+2026-04-02 13:21:17,068 - INFO - Best model saved (Recall@10=0.1856) to D:\Visual Studio Code\AI-educationRec-model\T5\ckpt\tiger.pth
+2026-04-02 13:21:17,069 - INFO - Epoch 6/50
+2026-04-02 13:22:32,045 - INFO - Training loss: 5.350501836043666
+2026-04-02 13:22:58,152 - INFO - Test: {'Recall@2': 0.0743392583494468, 'Recall@5': 0.12156154886748885, 'Recall@10': 0.18433993125145487} | {'NDCG@2': 0.06056368192454587, 'NDCG@5': 0.082278673337421, 'NDCG@10': 0.10187860338234932}
+2026-04-02 13:22:58,152 - INFO - Epoch 7/50
+2026-04-02 13:24:10,537 - INFO - Training loss: 5.347150071261704
+2026-04-02 13:24:36,242 - INFO - Test: {'Recall@2': 0.07299037356125682, 'Recall@5': 0.12446361650092305, 'Recall@10': 0.193521373806012} | {'NDCG@2': 0.06137824384674946, 'NDCG@5': 0.08487055437287869, 'NDCG@10': 0.10633696776375998}
+2026-04-02 13:24:36,319 - INFO - Best model saved (Recall@10=0.1935) to D:\Visual Studio Code\AI-educationRec-model\T5\ckpt\tiger.pth
+2026-04-02 13:24:36,319 - INFO - Epoch 8/50
+2026-04-02 13:25:49,322 - INFO - Training loss: 5.343824525227105
+2026-04-02 13:26:16,309 - INFO - Test: {'Recall@2': 0.08193112291940828, 'Recall@5': 0.13541774503379791, 'Recall@10': 0.20188044793951648} | {'NDCG@2': 0.06925485129390434, 'NDCG@5': 0.09340072487300413, 'NDCG@10': 0.11443710712589257}
+2026-04-02 13:26:16,454 - INFO - Best model saved (Recall@10=0.2019) to D:\Visual Studio Code\AI-educationRec-model\T5\ckpt\tiger.pth
+2026-04-02 13:26:16,454 - INFO - Epoch 9/50
+2026-04-02 13:27:28,989 - INFO - Training loss: 5.340558742210739
+2026-04-02 13:27:55,363 - INFO - Test: {'Recall@2': 0.06813008561060885, 'Recall@5': 0.12432952062615381, 'Recall@10': 0.19070196358322025} | {'NDCG@2': 0.05678863279444951, 'NDCG@5': 0.08204981934790893, 'NDCG@10': 0.1030906377137855}
+2026-04-02 13:27:55,363 - INFO - Epoch 10/50
+2026-04-02 13:29:10,212 - INFO - Training loss: 5.3385815543167014
+2026-04-02 13:29:36,457 - INFO - Test: {'Recall@2': 0.08370995563628279, 'Recall@5': 0.1400548094579895, 'Recall@10': 0.2051260856976099} | {'NDCG@2': 0.06963134514208554, 'NDCG@5': 0.09536103398296432, 'NDCG@10': 0.11561265658582436}
+2026-04-02 13:29:36,537 - INFO - Best model saved (Recall@10=0.2051) to D:\Visual Studio Code\AI-educationRec-model\T5\ckpt\tiger.pth
+2026-04-02 13:29:36,538 - INFO - Epoch 11/50
+2026-04-02 13:30:50,542 - INFO - Training loss: 5.3365398929743595
+2026-04-02 13:31:18,640 - INFO - Test: {'Recall@2': 0.090261404451571, 'Recall@5': 0.14355990413064676, 'Recall@10': 0.21120229485864359} | {'NDCG@2': 0.07454631399645426, 'NDCG@5': 0.0993429292638969, 'NDCG@10': 0.1207302234808655}
+2026-04-02 13:31:18,722 - INFO - Best model saved (Recall@10=0.2112) to D:\Visual Studio Code\AI-educationRec-model\T5\ckpt\tiger.pth
+2026-04-02 13:31:18,722 - INFO - Epoch 12/50
+2026-04-02 13:32:34,304 - INFO - Training loss: 5.334366983384511
+2026-04-02 13:33:00,621 - INFO - Test: {'Recall@2': 0.07784305897389511, 'Recall@5': 0.1404823310415001, 'Recall@10': 0.2068259813972248} | {'NDCG@2': 0.06450101970402053, 'NDCG@5': 0.09341747675746181, 'NDCG@10': 0.11423211529449259}
+2026-04-02 13:33:00,621 - INFO - Epoch 13/50
+2026-04-02 13:34:17,263 - INFO - Training loss: 5.33284457195567
+2026-04-02 13:34:43,366 - INFO - Test: {'Recall@2': 0.08721634435714898, 'Recall@5': 0.14969386024560793, 'Recall@10': 0.21433260046012595} | {'NDCG@2': 0.07244695204672366, 'NDCG@5': 0.10129167074014807, 'NDCG@10': 0.1218360550366868}
+2026-04-02 13:34:43,438 - INFO - Best model saved (Recall@10=0.2143) to D:\Visual Studio Code\AI-educationRec-model\T5\ckpt\tiger.pth
+2026-04-02 13:34:43,438 - INFO - Epoch 14/50
+2026-04-02 13:35:57,268 - INFO - Training loss: 5.331649659240063
+2026-04-02 13:36:23,803 - INFO - Test: {'Recall@2': 0.07900268902980623, 'Recall@5': 0.1381693794194786, 'Recall@10': 0.20721710784138397} | {'NDCG@2': 0.06538304728868302, 'NDCG@5': 0.09255280776549518, 'NDCG@10': 0.11424556311425563}
+2026-04-02 13:36:23,803 - INFO - Epoch 15/50
+2026-04-02 13:37:38,392 - INFO - Training loss: 5.3301477273448326
+2026-04-02 13:38:04,206 - INFO - Test: {'Recall@2': 0.08380652407473563, 'Recall@5': 0.14615867892339998, 'Recall@10': 0.21051661040877806} | {'NDCG@2': 0.07006658862831504, 'NDCG@5': 0.09877419994429079, 'NDCG@10': 0.11915801229273401}
+2026-04-02 13:38:04,206 - INFO - Epoch 16/50
+2026-04-02 13:39:18,022 - INFO - Training loss: 5.3288347409932495
+2026-04-02 13:39:44,497 - INFO - Test: {'Recall@2': 0.08230591199058317, 'Recall@5': 0.14137118125145487, 'Recall@10': 0.20599859853458038} | {'NDCG@2': 0.06818473582731055, 'NDCG@5': 0.09482795248269575, 'NDCG@10': 0.1153250997730642}
+2026-04-02 13:39:44,498 - INFO - Epoch 17/50
+2026-04-02 13:40:58,757 - INFO - Training loss: 5.327757162408288
+2026-04-02 13:41:25,013 - INFO - Test: {'Recall@2': 0.08199259026671864, 'Recall@5': 0.14468944753700716, 'Recall@10': 0.21387628627527358} | {'NDCG@2': 0.06963093476477575, 'NDCG@5': 0.09849994016550624, 'NDCG@10': 0.12049304815403764}
+2026-04-02 13:41:25,013 - INFO - Epoch 18/50
+2026-04-02 13:42:45,518 - INFO - Training loss: 5.326629798332922
+2026-04-02 13:43:13,227 - INFO - Test: {'Recall@2': 0.08485955680901033, 'Recall@5': 0.14680424784053123, 'Recall@10': 0.21353530424703224} | {'NDCG@2': 0.06931657962194991, 'NDCG@5': 0.09782188119359592, 'NDCG@10': 0.11884339906476123}
+2026-04-02 13:43:13,227 - INFO - Epoch 19/50
+2026-04-02 13:44:29,659 - INFO - Training loss: 5.325372588623761
+2026-04-02 13:44:57,556 - INFO - Test: {'Recall@2': 0.08502503338153922, 'Recall@5': 0.15741480624874687, 'Recall@10': 0.22077615790556882} | {'NDCG@2': 0.07040280020952377, 'NDCG@5': 0.10333357944089885, 'NDCG@10': 0.12373519622851091}
+2026-04-02 13:44:57,640 - INFO - Best model saved (Recall@10=0.2208) to D:\Visual Studio Code\AI-educationRec-model\T5\ckpt\tiger.pth
+2026-04-02 13:44:57,641 - INFO - Epoch 20/50
+2026-04-02 13:46:13,840 - INFO - Training loss: 5.324614557889428
+2026-04-02 13:46:40,149 - INFO - Test: {'Recall@2': 0.08122910109655848, 'Recall@5': 0.1441980322610123, 'Recall@10': 0.20655018710967665} | {'NDCG@2': 0.06949297591221348, 'NDCG@5': 0.09814817912694884, 'NDCG@10': 0.11784096423713479}
+2026-04-02 13:46:40,149 - INFO - Epoch 21/50
+2026-04-02 13:47:52,063 - INFO - Training loss: 5.323796788601055
+2026-04-02 13:48:17,397 - INFO - Test: {'Recall@2': 0.0855465353070848, 'Recall@5': 0.1532892148669173, 'Recall@10': 0.22031984372071645} | {'NDCG@2': 0.07212306620297292, 'NDCG@5': 0.10283350098557742, 'NDCG@10': 0.12410194038464874}
+2026-04-02 13:48:17,397 - INFO - Epoch 22/50
+2026-04-02 13:49:29,017 - INFO - Training loss: 5.322747261431923
+2026-04-02 13:49:54,150 - INFO - Test: {'Recall@2': 0.07316086457537747, 'Recall@5': 0.14111415068206493, 'Recall@10': 0.21109957968163398} | {'NDCG@2': 0.06344246001620042, 'NDCG@5': 0.09443711197250003, 'NDCG@10': 0.11658659342088197}
+2026-04-02 13:49:54,150 - INFO - Epoch 23/50
+2026-04-02 13:51:06,643 - INFO - Training loss: 5.322157053771479
+2026-04-02 13:51:33,839 - INFO - Test: {'Recall@2': 0.10109259828982518, 'Recall@5': 0.1627063361762883, 'Recall@10': 0.22982221053714777} | {'NDCG@2': 0.08234609180489921, 'NDCG@5': 0.11018987717310179, 'NDCG@10': 0.13160659829979532}
+2026-04-02 13:51:33,919 - INFO - Best model saved (Recall@10=0.2298) to D:\Visual Studio Code\AI-educationRec-model\T5\ckpt\tiger.pth
+2026-04-02 13:51:33,920 - INFO - Epoch 24/50
+2026-04-02 13:52:46,085 - INFO - Training loss: 5.321118943654772
+2026-04-02 13:57:42,030 - INFO - Configuration: {'rec_path': '../data/user_item_interact.h5', 'course_path': '../data/course_info.h5', 'course_id_map_path': '../data/course_id_map.h5', 'item_emb_h5_path': '../data/course_item_embs.h5', 'user_emb_h5_path': '../data/user_profile_embs.h5', 'encode_model': 'bert-base-uncased', 'encode_batch_size': 20, 'encode_max_len': 512, 'batch_size': 4, 'infer_size': 4, 'num_epochs': 50, 'lr': 0.0001, 'device': 'cuda', 'num_layers': 2, 'd_model': 256, 'd_ff': 512, 'num_heads': 8, 'd_kv': 64, 'dropout_rate': 0.3, 'feed_forward_proj': 'relu', 'input_emb_dim': 768, 'target_emb_dim': 768, 'temperature': 0.07, 'log_path': './logs/tiger.log', 'seed': 42, 'save_path': './ckpt/tiger.pth', 'early_stop': 10, 'topk_list': [2, 5, 10], 'loss_plot_path': './loss_picture/task1.png'}
+2026-04-02 13:57:42,140 - INFO - #Embedding parameters: 8224768
+#Non-embedding parameters: 1968640
+#Total trainable parameters: 10193408
 
-2026-02-03 14:52:08,150 - INFO - Configuration: {'batch_size': 256, 'infer_size': 96, 'num_epochs': 200, 'lr': 0.0001, 'device': 'cuda', 'num_layers': 4, 'num_decoder_layers': 4, 'd_model': 128, 'd_ff': 1024, 'num_heads': 6, 'd_kv': 64, 'dropout_rate': 0.1, 'vocab_size': 1025, 'pad_token_id': 0, 'eos_token_id': 0, 'feed_forward_proj': 'relu', 'max_len': 20, 'input_emb_dim': 768, 'target_emb_dim': 768, 'mode': 'train', 'log_path': './logs/tiger.log', 'seed': 2025, 'save_path': './ckpt/tiger.pth', 'early_stop': 10, 'topk_list': [5, 10, 20], 'beam_size': 30}
-2026-02-03 14:52:08,185 - INFO - #Embedding parameters: 131200
-#Non-embedding parameters: 2033856
-#Total trainable parameters: 2165056
+2026-04-02 13:57:47,812 - INFO - Epoch 1/50
+2026-04-02 14:29:57,494 - INFO - Configuration: {'rec_path': '../data/user_item_interact.h5', 'course_path': '../data/course_info.h5', 'course_id_map_path': '../data/course_id_map.h5', 'item_emb_h5_path': '../data/course_item_embs.h5', 'user_emb_h5_path': '../data/user_profile_embs.h5', 'encode_model': 'bert-base-uncased', 'encode_batch_size': 20, 'encode_max_len': 512, 'batch_size': 4, 'infer_size': 4, 'num_epochs': 50, 'lr': 0.0001, 'device': 'cuda', 'num_layers': 6, 'd_model': 512, 'd_ff': 2048, 'num_heads': 8, 'd_kv': 64, 'dropout_rate': 0.3, 'feed_forward_proj': 'relu', 'input_emb_dim': 768, 'target_emb_dim': 768, 'temperature': 0.07, 'log_path': './logs/tiger.log', 'seed': 42, 'save_path': './ckpt/tiger.pth', 'early_stop': 10, 'topk_list': [2, 5, 10], 'loss_plot_path': './loss_picture/task1.png'}
+2026-04-02 14:32:00,371 - INFO - #Embedding parameters: 16449536
+#Non-embedding parameters: 19668992
+#Total trainable parameters: 36118528
 
-2026-02-05 17:05:28,972 - INFO - Configuration: {'rec_path': '../data/user_item_interact.h5', 'course_path': '../data/course_info.h5', 'course_id_map_path': '../data/course_id_map.h5', 'batch_size': 256, 'infer_size': 256, 'num_epochs': 4, 'lr': 0.0001, 'device': 'cuda', 'num_layers': 4, 'd_model': 128, 'd_ff': 1024, 'num_heads': 6, 'd_kv': 64, 'dropout_rate': 0.1, 'feed_forward_proj': 'relu', 'input_emb_dim': 768, 'target_emb_dim': 768, 'temperature': 0.07, 'log_path': './logs/tiger.log', 'seed': 42, 'save_path': './ckpt/tiger.pth', 'early_stop': 10, 'topk_list': [5, 10, 20]}
-2026-02-05 17:05:29,042 - INFO - #Embedding parameters: 4112384
-#Non-embedding parameters: 2033856
-#Total trainable parameters: 6146240
+2026-04-02 14:32:07,055 - INFO - Epoch 1/50
+2026-04-02 14:39:37,197 - INFO - Configuration: {'rec_path': '../data/user_item_interact.h5', 'course_path': '../data/course_info.h5', 'course_id_map_path': '../data/course_id_map.h5', 'item_emb_h5_path': '../data/course_item_embs.h5', 'user_emb_h5_path': '../data/user_profile_embs.h5', 'encode_model': 'bert-base-uncased', 'encode_batch_size': 20, 'encode_max_len': 512, 'batch_size': 256, 'infer_size': 256, 'num_epochs': 50, 'lr': 0.0001, 'device': 'cuda', 'num_layers': 6, 'd_model': 512, 'd_ff': 2048, 'num_heads': 8, 'd_kv': 64, 'dropout_rate': 0.3, 'feed_forward_proj': 'relu', 'input_emb_dim': 768, 'target_emb_dim': 768, 'temperature': 0.07, 'pretrained_path': '../pretrained/t5-small', 'log_path': './logs/tiger.log', 'seed': 42, 'save_path': './ckpt/tiger.pth', 'early_stop': 10, 'topk_list': [2, 5, 10], 'loss_plot_path': './loss_picture/task1.png'}
+2026-04-02 14:39:37,514 - INFO - #Embedding parameters: 16449536
+#Non-embedding parameters: 19668992
+#Total trainable parameters: 36118528
 
-2026-02-11 17:22:07,525 - INFO - Configuration: {'rec_path': '../test_data/user_item_interact.h5', 'course_path': '../test_data/course_info.h5', 'course_id_map_path': '../test_data/course_id_map.h5', 'batch_size': 256, 'infer_size': 256, 'num_epochs': 4, 'lr': 0.0001, 'device': 'cuda', 'num_layers': 4, 'd_model': 128, 'd_ff': 1024, 'num_heads': 6, 'd_kv': 64, 'dropout_rate': 0.1, 'feed_forward_proj': 'relu', 'input_emb_dim': 768, 'target_emb_dim': 768, 'temperature': 0.07, 'log_path': './logs/tiger.log', 'seed': 42, 'save_path': './ckpt/tiger.pth', 'early_stop': 10, 'topk_list': [5, 10, 20]}
-2026-02-11 17:22:07,630 - INFO - #Embedding parameters: 4112384
-#Non-embedding parameters: 2033856
-#Total trainable parameters: 6146240
-
-2026-02-11 17:24:14,680 - INFO - Configuration: {'rec_path': '../test_data/user_item_interact.h5', 'course_path': '../test_data/course_info.h5', 'course_id_map_path': '../test_data/course_id_map.h5', 'batch_size': 20, 'infer_size': 16, 'num_epochs': 4, 'lr': 0.0001, 'device': 'cuda', 'num_layers': 2, 'd_model': 16, 'd_ff': 32, 'num_heads': 3, 'd_kv': 8, 'dropout_rate': 0.1, 'feed_forward_proj': 'relu', 'input_emb_dim': 32, 'target_emb_dim': 32, 'temperature': 0.07, 'log_path': './logs/tiger.log', 'seed': 42, 'save_path': './ckpt/tiger.pth', 'early_stop': 10, 'topk_list': [5, 10, 20]}
-2026-02-11 17:24:14,691 - INFO - #Embedding parameters: 514048
-#Non-embedding parameters: 6368
-#Total trainable parameters: 520416
-
+2026-04-02 14:39:43,191 - INFO - Epoch 1/50
+2026-04-02 14:47:51,150 - INFO - Training loss: 5.413004654146979
+2026-04-02 14:49:58,357 - INFO - Test: {'Recall@2': 0.03925434282869675, 'Recall@5': 0.08127665741605844, 'Recall@10': 0.13207311249207776} | {'NDCG@2': 0.030831892058894094, 'NDCG@5': 0.04960619546329562, 'NDCG@10': 0.0657543727843538}
+2026-04-02 14:49:58,595 - INFO - Best model saved (Recall@10=0.1321) to D:\Visual Studio Code\AI-educationRec-model\T5\ckpt\tiger.pth
+2026-04-02 14:49:58,595 - INFO - Epoch 2/50
+2026-04-02 14:58:08,045 - INFO - Training loss: 5.359629874396818
+2026-04-02 15:00:15,500 - INFO - Test: {'Recall@2': 0.06707705287633413, 'Recall@5': 0.12448124792211628, 'Recall@10': 0.1850256157013204} | {'NDCG@2': 0.05770102401284336, 'NDCG@5': 0.08379007370446705, 'NDCG@10': 0.10277758023686066}
+2026-04-02 15:00:15,788 - INFO - Best model saved (Recall@10=0.1850) to D:\Visual Studio Code\AI-educationRec-model\T5\ckpt\tiger.pth
+2026-04-02 15:00:15,789 - INFO - Epoch 3/50
+2026-04-02 15:08:24,424 - INFO - Training loss: 5.342133434048437
+2026-04-02 15:10:31,629 - INFO - Test: {'Recall@2': 0.07066367266266887, 'Recall@5': 0.12656968196947246, 'Recall@10': 0.17355386738752676} | {'NDCG@2': 0.060345169395896986, 'NDCG@5': 0.08621012028761027, 'NDCG@10': 0.10137668860758223}
+2026-04-02 15:10:31,629 - INFO - Epoch 4/50
+2026-04-02 15:18:41,817 - INFO - Training loss: 5.332465613457021
+2026-04-02 15:20:49,566 - INFO - Test: {'Recall@2': 0.08069255584623755, 'Recall@5': 0.14851918686492147, 'Recall@10': 0.1949304318933034} | {'NDCG@2': 0.06821800855649528, 'NDCG@5': 0.09859125125335484, 'NDCG@10': 0.11334955107913244}
+2026-04-02 15:20:49,826 - INFO - Best model saved (Recall@10=0.1949) to D:\Visual Studio Code\AI-educationRec-model\T5\ckpt\tiger.pth
+2026-04-02 15:20:49,826 - INFO - Epoch 5/50
+2026-04-02 15:29:01,339 - INFO - Training loss: 5.325584255822815
+2026-04-02 15:31:09,644 - INFO - Test: {'Recall@2': 0.08515039442133383, 'Recall@5': 0.1517009309305306, 'Recall@10': 0.20371201316872672} | {'NDCG@2': 0.07173062651507815, 'NDCG@5': 0.10188154962310741, 'NDCG@10': 0.118598016430845}
+2026-04-02 15:31:09,892 - INFO - Best model saved (Recall@10=0.2037) to D:\Visual Studio Code\AI-educationRec-model\T5\ckpt\tiger.pth
+2026-04-02 15:31:09,893 - INFO - Epoch 6/50
+2026-04-02 15:39:43,291 - INFO - Training loss: 5.3200980528961095

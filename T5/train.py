@@ -12,6 +12,7 @@ import os
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+import torch.nn.functional as F
 
 def collate_emb_batch(batch: List[Dict[str, Any]]):
     seq_lens = [b['seq_len'] for b in batch] # 取出每个样本
@@ -36,10 +37,11 @@ def collate_emb_batch(batch: List[Dict[str, Any]]):
         'user_id': user_id,
     }
 
-def train_one_epoch(model, train_loader, optimizer, device):
+def train_one_epoch(model, train_loader, optimizer, device, params, epoch=None):
     model.train()
     total_loss = 0.0
-    for batch in tqdm(train_loader, desc="Training"):
+    desc = f"Epoch {epoch}/{params['num_epochs']}" if epoch is not None else "Training"
+    for batch in tqdm(train_loader, desc=desc, leave=True):
         seq_embs = batch['seq_embs'].to(device)
         attention_mask = batch['attention_mask'].to(device)
         target_emb = batch['target_emb'].to(device)
@@ -48,7 +50,6 @@ def train_one_epoch(model, train_loader, optimizer, device):
         loss, _ = model(seq_embs=seq_embs, attention_mask=attention_mask, target_emb=target_emb)
         loss.backward()
         optimizer.step()
-
         total_loss += loss.item()
         
     return total_loss / len(train_loader)
@@ -65,6 +66,37 @@ def eval_loss(model, eval_loader, device):
             total_loss += loss.item()
     return total_loss / len(eval_loader)
 
+def evaluate(model, test_loader, item_embs_np, params, device):
+    model.eval()
+    item_embs_t = torch.tensor(item_embs_np, dtype=torch.float32, device=device)
+    item_embs_t = torch.nn.functional.normalize(item_embs_t, p=2, dim=1)
+    topk_list = params.get('topk_list', [5, 10, 20])
+    recalls = {f'Recall@{k}': [] for k in topk_list}
+    ndcgs   = {f'NDCG@{k}':   [] for k in topk_list}
+    with torch.no_grad():
+        for batch in tqdm(test_loader, desc="Test", leave=False):
+            seq_embs = batch['seq_embs'].to(device)
+            attention_mask = batch['attention_mask'].to(device)
+            target_id = batch['target_id'].to(device)
+            _, pred_emb = model(seq_embs=seq_embs, attention_mask=attention_mask, target_emb=None)
+            pred_emb = torch.nn.functional.normalize(pred_emb, p=2, dim=1)
+            scores = pred_emb @ item_embs_t.T
+            max_k  = max(topk_list)
+            topk_idx = torch.topk(scores, k=max_k, dim=1).indices
+            for k in topk_list:
+                cur_topk = topk_idx[:, :k]
+                hit = (cur_topk == target_id.unsqueeze(1)).any(dim=1).float()
+                recalls[f'Recall@{k}'].append(hit.mean().item())
+                ranks = torch.arange(1, k + 1, device=device).unsqueeze(0)
+                match = (cur_topk == target_id.unsqueeze(1)).float()
+                ndcg  = (match / torch.log2(ranks + 1)).sum(dim=1)
+                ndcgs[f'NDCG@{k}'].append(ndcg.mean().item())
+    model.train()
+    avg_recalls = {k: sum(v) / len(v) if v else 0.0 for k, v in recalls.items()}
+    avg_ndcgs   = {k: sum(v) / len(v) if v else 0.0 for k, v in ndcgs.items()}
+    return avg_recalls, avg_ndcgs
+
+
 def set_seed(seed):
     """Set random seed for reproducibility."""
     random.seed(seed)
@@ -74,34 +106,20 @@ def set_seed(seed):
         torch.cuda.manual_seed_all(seed)
 
 def build_splits_and_loaders(params):
-    full_dataset = EmbDataset(
-        params['rec_path'],
-        params['course_path'],
-        params['course_id_map_path'],
+    shared_kwargs = dict(
+        rec_path=params['rec_path'],
+        course_path=params['course_path'],
+        course_id_map=params['course_id_map_path'],
         item_emb_h5_path=params.get('item_emb_h5_path'),
-        user_emb_h5_path=params.get('user_emb_h5_path')
+        user_emb_h5_path=params.get('user_emb_h5_path'),
     )
-    n_total = len(full_dataset)
-    n_train = int(n_total * 0.8)
-    n_valid = int(n_total * 0.1)
-    n_test = n_total - n_train - n_valid
-
-    train_dataset, validation_dataset, test_dataset = torch.utils.data.random_split(
-        full_dataset,
-        [n_train, n_valid, n_test],
-        generator=torch.Generator().manual_seed(params['seed'])
-    )
+    train_dataset = EmbDataset(**shared_kwargs, mode='train')
+    test_dataset  = EmbDataset(**shared_kwargs, mode='test')
 
     train_dataloader = DataLoader(
         train_dataset,
         batch_size=params['batch_size'],
         shuffle=True,
-        collate_fn=collate_emb_batch,
-    )
-    validation_dataloader = DataLoader(
-        validation_dataset,
-        batch_size=params['infer_size'],
-        shuffle=False,
         collate_fn=collate_emb_batch,
     )
     test_dataloader = DataLoader(
@@ -111,7 +129,7 @@ def build_splits_and_loaders(params):
         collate_fn=collate_emb_batch,
     )
 
-    return full_dataset, train_dataloader, validation_dataloader, test_dataloader
+    return train_dataset, train_dataloader, test_dataloader
 
 def train(params):
     log_path = os.path.abspath(params['log_path'])
@@ -135,43 +153,55 @@ def train(params):
     # Check if the device is available
     device = torch.device(params['device'] if torch.cuda.is_available() else 'cpu')
 
-    _, train_dataloader, validation_dataloader, _ = build_splits_and_loaders(params)
+    train_dataset, train_dataloader, test_dataloader = build_splits_and_loaders(params)
 
     # optimizer
     optimizer = optim.Adam(model.parameters(), lr=params['lr'])
 
     # Train the model
     model.to(device)
-    best_val_loss = float('inf')
-    early_stop_counter = 0
+    best_recall = -1.0
+    no_improve = 0
+    patience = params.get('early_stop', 10)
     train_losses = []
-    val_losses = []
+    val_losses   = []
     
     for epoch in range(params['num_epochs']):
         logging.info(f"Epoch {epoch + 1}/{params['num_epochs']}")
-        train_loss = train_one_epoch(model, train_dataloader, optimizer, device)
-        logging.info(f"Training loss: {train_loss}")
+        train_loss = train_one_epoch(model, train_dataloader, optimizer, device, params, epoch=epoch+1)
+        val_loss   = eval_loss(model, test_dataloader, device)
+        logging.info(f"Training loss: {train_loss} | Val loss: {val_loss}")
         train_losses.append(train_loss)
-        val_loss = eval_loss(model, validation_dataloader, device)
-        logging.info(f"Validation loss: {val_loss}")
         val_losses.append(val_loss)
-        if val_loss < best_val_loss:
-            best_val_loss = val_loss
-            early_stop_counter = 0  # Reset early stop counter
+        avg_recalls, avg_ndcgs = evaluate(model, test_dataloader, train_dataset.item_embs, params, device)
+        topk_list = params['topk_list']
+        top_k = topk_list[-1]
+        cur_recall = avg_recalls.get(f'Recall@{top_k}', 0)
+        print(f"Epoch {epoch + 1}/{params['num_epochs']} | Train Loss: {train_loss:.4f} | Val Loss: {val_loss:.4f}")
+        for k in topk_list:
+            print(f"  Recall@{k}: {avg_recalls.get(f'Recall@{k}', 0):.4f}  NDCG@{k}: {avg_ndcgs.get(f'NDCG@{k}', 0):.4f}")
+        logging.info(f"Test: {avg_recalls} | {avg_ndcgs}")
+        if cur_recall > best_recall:
+            best_recall = cur_recall
+            no_improve = 0
             torch.save(model.state_dict(), save_path)
-            logging.info(f"Best model saved to {save_path}")
+            logging.info(f"Best model saved (Recall@{top_k}={best_recall:.4f}) to {save_path}")
+            print(f"  >> Best model saved (Recall@{top_k}={best_recall:.4f})")
         else:
-            early_stop_counter += 1
-            logging.info(f"No improvement in val_loss. Early stop counter: {early_stop_counter}")
-            if early_stop_counter >= params['early_stop']:
-                logging.info("Early stopping triggered.")
+            no_improve += 1
+            if no_improve >= patience:
+                print(f"早停：Epoch {epoch + 1}，Recall@{top_k} 连续 {patience} 次未提升")
+                logging.info(f"Early stopping at epoch {epoch + 1}.")
                 break
+
+    print(f"训练完成，最优模型已保存至 {save_path}")
+    logging.info(f"Training complete. Best Recall@{top_k}={best_recall:.4f}")
 
     # 绘制并保存 loss 曲线
     epochs = list(range(1, len(train_losses) + 1))
     plt.figure(figsize=(8, 5))
     plt.plot(epochs, train_losses, marker='o', label='Train Loss')
-    plt.plot(epochs, val_losses, marker='o', label='Val Loss')
+    plt.plot(epochs, val_losses,   marker='s', label='Val Loss')
     plt.xlabel('Epoch')
     plt.ylabel('Loss')
     plt.grid(True)

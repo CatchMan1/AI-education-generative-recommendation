@@ -26,8 +26,23 @@ def train_one_epoch(model, train_loader, optimizer, device, epoch=None, num_epoc
         attention_mask = batch['attention_mask'].to(device)
         labels = batch['target'].to(device)
 
+        prof_lvl1 = batch['prof_lvl1']
+        prof_lvl2 = batch['prof_lvl2']
+        prof_lvl3 = batch['prof_lvl3']
+        
+        prof_lvl1 = prof_lvl1.to(device)
+        prof_lvl2 = prof_lvl2.to(device)
+        prof_lvl3 = prof_lvl3.to(device)
+
         optimizer.zero_grad()
-        loss, _ = model(input_ids=input_ids, attention_mask=attention_mask, labels=labels)
+        loss, _ = model(
+            input_ids=input_ids,
+            attention_mask=attention_mask,
+            labels=labels,
+            prof_lvl1=prof_lvl1,
+            prof_lvl2=prof_lvl2,
+            prof_lvl3=prof_lvl3,
+        )
         loss.backward()
         optimizer.step()
 
@@ -36,6 +51,30 @@ def train_one_epoch(model, train_loader, optimizer, device, epoch=None, num_epoc
         
     avg_loss = total_loss / len(train_loader)
     return avg_loss
+
+def eval_loss(model, test_loader, device):
+    model.eval()
+    total_loss = 0.0
+    with torch.no_grad():
+        for batch in test_loader:
+            input_ids      = batch['history'].to(device)
+            attention_mask = batch['attention_mask'].to(device)
+            labels         = batch['target'].to(device)
+            prof_lvl1 = batch['prof_lvl1'].to(device)
+            prof_lvl2 = batch['prof_lvl2'].to(device)
+            prof_lvl3 = batch['prof_lvl3'].to(device)
+            loss, _ = model(
+                input_ids=input_ids,
+                attention_mask=attention_mask,
+                labels=labels,
+                prof_lvl1=prof_lvl1,
+                prof_lvl2=prof_lvl2,
+                prof_lvl3=prof_lvl3,
+            )
+            total_loss += loss.item()
+    model.train()
+    return total_loss / len(test_loader)
+
 
 def set_seed(seed):
     """Set random seed for reproducibility."""
@@ -82,13 +121,15 @@ def train(params):
         dataset_path=params['train_dataset_path'],
         code_path=params['code_path'],
         max_len=params['max_len'],
-        codebook_size = params['codebook_size']
+        codebook_size=params['codebook_size'],
+        prof_h5_paths=params.get('prof_h5_paths', None),
     )
     test_dataset = GenRecDataset(
         dataset_path=params['test_dataset_path'],
         code_path=params['code_path'],
         max_len=params['max_len'],
-        codebook_size=params['codebook_size']
+        codebook_size=params['codebook_size'],
+        prof_h5_paths=params.get('prof_h5_paths', None),
     )
 
     train_dataloader = GenRecDataLoader(train_dataset, batch_size=params['batch_size'], shuffle=True)
@@ -112,40 +153,42 @@ def train(params):
     no_improve = 0
     patience = params.get('early_stop', 10)
     train_losses = []
+    val_losses   = []
     
     for epoch in range(params['num_epochs']):
         print(f"\n=== Epoch {epoch + 1}/{params['num_epochs']} ===")
         train_loss = train_one_epoch(model, train_dataloader, optimizer, device, epoch=epoch+1, num_epochs=params['num_epochs'])
+        val_loss   = eval_loss(model, test_dataloader, device)
         train_losses.append(train_loss)
-        print(f"Training loss: {train_loss:.4f}")
-        logging.info(f"Epoch {epoch + 1}/{params['num_epochs']}, Training loss: {train_loss:.4f}")
+        val_losses.append(val_loss)
+        print(f"Training loss: {train_loss:.4f} | Val loss: {val_loss:.4f}")
+        logging.info(f"Epoch {epoch + 1}/{params['num_epochs']}, Training loss: {train_loss:.4f}, Val loss: {val_loss:.4f}")
 
-        eval_freq = params['eval_freq']
-        if (epoch + 1) % eval_freq == 0:
-            avg_recalls, avg_ndcgs = evaluate_model(model, test_dataloader, params['topk_list'], params['beam_size'], device)
-            print("Test Results:")
-            cur_ndcg = avg_ndcgs.get('NDCG@20', avg_ndcgs.get(f"NDCG@{params['topk_list'][-1]}", 0))
-            for k in params['topk_list']:
-                r_key, n_key = f'Recall@{k}', f'NDCG@{k}'
-                print(f"  {r_key}: {avg_recalls.get(r_key, 0):.4f}  {n_key}: {avg_ndcgs.get(n_key, 0):.4f}")
-            logging.info(f"Test: {avg_recalls} | {avg_ndcgs}")
-            if cur_ndcg > best_ndcg:
-                best_ndcg = cur_ndcg
-                no_improve = 0
-                torch.save(model.state_dict(), params['save_path'])
-                logging.info(f"Best model saved (NDCG={best_ndcg:.4f}) to {params['save_path']}")
-                print(f"  >> Best model saved (NDCG={best_ndcg:.4f})")
-            else:
-                no_improve += 1
-                if no_improve >= patience:
-                    print(f"早停：Epoch {epoch + 1}，NDCG 连续 {patience} 次未提升")
-                    logging.info(f"Early stopping at epoch {epoch + 1}.")
-                    break
+        avg_recalls, avg_ndcgs = evaluate_model(model, test_dataloader, params['topk_list'], params['beam_size'], device)
+        print("Test Results:")
+        cur_ndcg = avg_ndcgs.get('NDCG@20', avg_ndcgs.get(f"NDCG@{params['topk_list'][-1]}", 0))
+        for k in params['topk_list']:
+            r_key, n_key = f'Recall@{k}', f'NDCG@{k}'
+            print(f"  {r_key}: {avg_recalls.get(r_key, 0):.4f}  {n_key}: {avg_ndcgs.get(n_key, 0):.4f}")
+        logging.info(f"Test: {avg_recalls} | {avg_ndcgs}")
+        if cur_ndcg > best_ndcg:
+            best_ndcg = cur_ndcg
+            no_improve = 0
+            torch.save(model.state_dict(), params['save_path'])
+            logging.info(f"Best model saved (NDCG={best_ndcg:.4f}) to {params['save_path']}")
+            print(f"  >> Best model saved (NDCG={best_ndcg:.4f})")
+        else:
+            no_improve += 1
+            if no_improve >= patience:
+                print(f"早停：Epoch {epoch + 1}，NDCG 连续 {patience} 次未提升")
+                logging.info(f"Early stopping at epoch {epoch + 1}.")
+                break
 
     print(f"训练完成，最优模型已保存至 {params['save_path']}")
 
     plot_training_curves(
         train_losses=train_losses,
+        val_losses=val_losses,
         val_metrics={},
         save_path=params.get('loss_plot_path', './training_curves.png'),
         show_plot=False
