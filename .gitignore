@@ -35,9 +35,9 @@ wheels/
 .DS_Store
 Thumbs.db
 
-# 数据文件夹（根据需要）
-data/MOOCCube/
-data/user_profile_embs.h5
+# 数据文件夹
+data/
+test_data/
 pretrained/
 
 # 模型 checkpoint 与训练产物
