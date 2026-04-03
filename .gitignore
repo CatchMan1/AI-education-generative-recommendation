@@ -39,3 +39,15 @@ Thumbs.db
 data/MOOCCube/
 data/user_profile_embs.h5
 pretrained/
+
+# 模型 checkpoint 与训练产物
+*.pth
+*.pt
+*/ckpt/
+*/loss_picture/
+
+# 大型数据文件
+*.h5
+*.hdf5
+*.npy
+*.npz
