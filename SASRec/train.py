@@ -103,7 +103,7 @@ def train(params):
 
     topk_list = params['topk_list']
     top_k_main = topk_list[-1]
-    best_ndcg = -1.0
+    best_val_loss = float('inf')
     no_improve = 0
     patience = params['early_stop']
     train_losses = []
@@ -181,27 +181,23 @@ def train(params):
         train_losses.append(avg_loss)
         val_losses.append(val_loss)
 
-        avg_hits, avg_ndcgs = evaluate(model, test_loader, params, device)
-        cur_ndcg = avg_ndcgs[top_k_main]
-        improved = " *" if cur_ndcg > best_ndcg else ""
-        print(f"Epoch {epoch:>3} | Train Loss: {avg_loss:.4f} | Val Loss: {val_loss:.4f}{improved}")
-        for k in topk_list:
-            print(f"  Hit@{k}: {avg_hits[k]:.4f}  NDCG@{k}: {avg_ndcgs[k]:.4f}")
-        logging.info(f"Epoch {epoch} | Train Loss: {avg_loss:.4f} | Val Loss: {val_loss:.4f} | Hits: {avg_hits} | NDCGs: {avg_ndcgs}")
-        if cur_ndcg > best_ndcg:
-            best_ndcg = cur_ndcg
+        print(f"Epoch {epoch:>3} | Train Loss: {avg_loss:.4f} | Val Loss: {val_loss:.4f}")
+        logging.info(f"Epoch {epoch} | Train Loss: {avg_loss:.4f} | Val Loss: {val_loss:.4f}")
+        if val_loss < best_val_loss:
+            best_val_loss = val_loss
             no_improve = 0
             torch.save(model.state_dict(), params["ckpt"])
-            logging.info(f"Best model saved (NDCG@{top_k_main}={best_ndcg:.4f}) to {params['ckpt']}")
+            logging.info(f"Best model saved (val_loss={best_val_loss:.4f}) to {params['ckpt']}")
+            print(f"  >> Best model saved (val_loss={best_val_loss:.4f})")
         else:
             no_improve += 1
             if no_improve >= patience:
-                print(f"早停：Epoch {epoch}，NDCG@{top_k_main} 连续 {patience} 次未提升")
+                print(f"早停：Epoch {epoch}，val_loss 连续 {patience} 次未降低")
                 logging.info(f"Early stopping at epoch {epoch}.")
                 break
 
-    print(f"训练完成，最优 NDCG@{top_k_main}: {best_ndcg:.4f}，权重已保存至 {params['ckpt']}")
-    logging.info(f"Training complete. Best NDCG@{top_k_main}={best_ndcg:.4f}")
+    print(f"训练完成，最优模型已保存至 {params['ckpt']}")
+    logging.info(f"Training complete. Best val_loss={best_val_loss:.4f}")
 
     plot_path = params['loss_plot_path']
     os.makedirs(os.path.dirname(os.path.abspath(plot_path)), exist_ok=True)

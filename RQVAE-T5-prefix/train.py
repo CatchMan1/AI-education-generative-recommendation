@@ -149,7 +149,7 @@ def train(params):
 
     # Train the model
     model.to(device)
-    best_ndcg = -1.0
+    best_val_loss = float('inf')
     no_improve = 0
     patience = params.get('early_stop', 10)
     train_losses = []
@@ -164,27 +164,21 @@ def train(params):
         print(f"Training loss: {train_loss:.4f} | Val loss: {val_loss:.4f}")
         logging.info(f"Epoch {epoch + 1}/{params['num_epochs']}, Training loss: {train_loss:.4f}, Val loss: {val_loss:.4f}")
 
-        avg_recalls, avg_ndcgs = evaluate_model(model, test_dataloader, params['topk_list'], params['beam_size'], device)
-        print("Test Results:")
-        cur_ndcg = avg_ndcgs.get('NDCG@20', avg_ndcgs.get(f"NDCG@{params['topk_list'][-1]}", 0))
-        for k in params['topk_list']:
-            r_key, n_key = f'Recall@{k}', f'NDCG@{k}'
-            print(f"  {r_key}: {avg_recalls.get(r_key, 0):.4f}  {n_key}: {avg_ndcgs.get(n_key, 0):.4f}")
-        logging.info(f"Test: {avg_recalls} | {avg_ndcgs}")
-        if cur_ndcg > best_ndcg:
-            best_ndcg = cur_ndcg
+        if val_loss < best_val_loss:
+            best_val_loss = val_loss
             no_improve = 0
             torch.save(model.state_dict(), params['save_path'])
-            logging.info(f"Best model saved (NDCG={best_ndcg:.4f}) to {params['save_path']}")
-            print(f"  >> Best model saved (NDCG={best_ndcg:.4f})")
+            logging.info(f"Best model saved (val_loss={best_val_loss:.4f}) to {params['save_path']}")
+            print(f"  >> Best model saved (val_loss={best_val_loss:.4f})")
         else:
             no_improve += 1
             if no_improve >= patience:
-                print(f"早停：Epoch {epoch + 1}，NDCG 连续 {patience} 次未提升")
+                print(f"早停：Epoch {epoch + 1}，val_loss 连续 {patience} 次未降低")
                 logging.info(f"Early stopping at epoch {epoch + 1}.")
                 break
 
     print(f"训练完成，最优模型已保存至 {params['save_path']}")
+    logging.info(f"Training complete. Best val_loss={best_val_loss:.4f}")
 
     plot_training_curves(
         train_losses=train_losses,

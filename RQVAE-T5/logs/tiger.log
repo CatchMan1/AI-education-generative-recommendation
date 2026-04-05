@@ -89,3 +89,337 @@
 2026-04-03 17:00:04,503 - INFO - Best model saved (NDCG=0.2277) to ./ckpt/tiger.pth
 2026-04-03 17:02:30,246 - INFO - Epoch 33/50, Training loss: 1.2324
 2026-04-03 17:04:50,462 - INFO - Epoch 34/50, Training loss: 1.2305
+2026-04-04 02:15:14,624 - INFO - Configuration: {'code_path': '../data/course/course_rqvae_codes.npy', 'train_dataset_path': '../data/tiger/train_dataset.h5', 'test_dataset_path': '../data/tiger/test_dataset.h5', 'batch_size': 256, 'infer_size': 256, 'num_epochs': 50, 'lr': 0.0001, 'device': 'cuda:0', 'num_layers': 2, 'num_decoder_layers': 2, 'd_model': 64, 'd_ff': 256, 'num_heads': 4, 'd_kv': 16, 'dropout_rate': 0.1, 'vocab_size': 64, 'codebook_size': 8, 'pad_token_id': 0, 'eos_token_id': 31, 'feed_forward_proj': 'relu', 'max_len': 20, 'log_path': './logs/tiger.log', 'seed': 42, 'save_path': './ckpt/tiger.pth', 'early_stop': 5, 'topk_list': [2, 5], 'loss_plot_path': './loss_picture/task1.png', 'beam_size': 5, 'eval_freq': 1}
+2026-04-04 02:17:21,604 - INFO - #Embedding parameters: 4096
+#Non-embedding parameters: 230400
+#Total trainable parameters: 234496
+
+2026-04-04 02:17:32,297 - INFO - Configuration: {'code_path': '../data/course/course_rqvae_codes.npy', 'train_dataset_path': '../data/tiger/train_dataset.h5', 'test_dataset_path': '../data/tiger/test_dataset.h5', 'batch_size': 256, 'infer_size': 256, 'num_epochs': 50, 'lr': 0.0001, 'device': 'cuda:0', 'num_layers': 2, 'num_decoder_layers': 2, 'd_model': 64, 'd_ff': 256, 'num_heads': 4, 'd_kv': 16, 'dropout_rate': 0.1, 'vocab_size': 64, 'codebook_size': 8, 'pad_token_id': 0, 'eos_token_id': 31, 'feed_forward_proj': 'relu', 'max_len': 20, 'log_path': './logs/tiger.log', 'seed': 42, 'save_path': './ckpt/tiger.pth', 'early_stop': 5, 'topk_list': [2, 5], 'loss_plot_path': './loss_picture/task1.png', 'beam_size': 5, 'eval_freq': 1}
+2026-04-04 02:17:32,307 - INFO - #Embedding parameters: 4096
+#Non-embedding parameters: 230400
+#Total trainable parameters: 234496
+
+2026-04-04 02:17:33,389 - INFO - 使用设备: cuda:0
+2026-04-04 02:19:03,243 - INFO - Configuration: {'code_path': '../data/course/course_rqvae_codes.npy', 'train_dataset_path': '../data/tiger/train_dataset.h5', 'test_dataset_path': '../data/tiger/test_dataset.h5', 'batch_size': 256, 'infer_size': 256, 'num_epochs': 100, 'lr': 0.0001, 'device': 'cuda:0', 'num_layers': 2, 'num_decoder_layers': 2, 'd_model': 64, 'd_ff': 256, 'num_heads': 4, 'd_kv': 16, 'dropout_rate': 0.1, 'vocab_size': 64, 'codebook_size': 8, 'pad_token_id': 0, 'eos_token_id': 31, 'feed_forward_proj': 'relu', 'max_len': 20, 'log_path': './logs/tiger.log', 'seed': 42, 'save_path': './ckpt/tiger.pth', 'early_stop': 5, 'topk_list': [2, 5], 'loss_plot_path': './loss_picture/task1.png', 'beam_size': 5, 'eval_freq': 1}
+2026-04-04 02:19:03,253 - INFO - #Embedding parameters: 4096
+#Non-embedding parameters: 230400
+#Total trainable parameters: 234496
+
+2026-04-04 02:19:04,284 - INFO - 使用设备: cuda:0
+2026-04-04 02:21:20,173 - INFO - Epoch 1/100, Training loss: 1.9624
+2026-04-04 02:31:08,693 - INFO - Test: {'Recall@2': 0.1086329863114587, 'Recall@5': 0.18127460769769654} | {'NDCG@2': 0.09614593712438207, 'NDCG@5': 0.1285269910584506}
+2026-04-04 02:31:08,712 - INFO - Best model saved (NDCG=0.1285) to ./ckpt/tiger.pth
+2026-04-04 02:33:13,522 - INFO - Epoch 2/100, Training loss: 1.5263
+2026-04-04 02:43:13,682 - INFO - Test: {'Recall@2': 0.136619343314989, 'Recall@5': 0.21011636667852426} | {'NDCG@2': 0.11945939343672336, 'NDCG@5': 0.1523444825938176}
+2026-04-04 02:43:13,694 - INFO - Best model saved (NDCG=0.1523) to ./ckpt/tiger.pth
+2026-04-04 02:45:18,861 - INFO - Epoch 3/100, Training loss: 1.4392
+2026-04-04 02:55:15,414 - INFO - Test: {'Recall@2': 0.14649158512459365, 'Recall@5': 0.22940740668422097} | {'NDCG@2': 0.12779982220231687, 'NDCG@5': 0.16490894398245032}
+2026-04-04 02:55:15,424 - INFO - Best model saved (NDCG=0.1649) to ./ckpt/tiger.pth
+2026-04-04 02:57:23,172 - INFO - Epoch 4/100, Training loss: 1.3963
+2026-04-04 03:07:21,448 - INFO - Test: {'Recall@2': 0.15521184976235153, 'Recall@5': 0.23868249556494142} | {'NDCG@2': 0.1362327542205918, 'NDCG@5': 0.17380212596929745}
+2026-04-04 03:07:21,461 - INFO - Best model saved (NDCG=0.1738) to ./ckpt/tiger.pth
+2026-04-04 03:09:29,279 - INFO - Epoch 5/100, Training loss: 1.3705
+2026-04-04 03:19:30,995 - INFO - Test: {'Recall@2': 0.16112547901136945, 'Recall@5': 0.24683033549114464} | {'NDCG@2': 0.14167739159300244, 'NDCG@5': 0.1802260735878676}
+2026-04-04 03:19:31,007 - INFO - Best model saved (NDCG=0.1802) to ./ckpt/tiger.pth
+2026-04-04 03:21:39,206 - INFO - Epoch 6/100, Training loss: 1.3515
+2026-04-04 03:31:39,774 - INFO - Test: {'Recall@2': 0.1646582822218018, 'Recall@5': 0.25204565050454947} | {'NDCG@2': 0.1452553419860694, 'NDCG@5': 0.18458368563300484}
+2026-04-04 03:31:39,786 - INFO - Best model saved (NDCG=0.1846) to ./ckpt/tiger.pth
+2026-04-04 03:33:44,479 - INFO - Epoch 7/100, Training loss: 1.3369
+2026-04-04 03:43:42,327 - INFO - Test: {'Recall@2': 0.16782789188000216, 'Recall@5': 0.25740758079945564} | {'NDCG@2': 0.1471172325093369, 'NDCG@5': 0.18743824475412393}
+2026-04-04 03:43:42,338 - INFO - Best model saved (NDCG=0.1874) to ./ckpt/tiger.pth
+2026-04-04 03:45:50,369 - INFO - Epoch 8/100, Training loss: 1.3260
+2026-04-04 03:55:51,369 - INFO - Test: {'Recall@2': 0.1701844282268519, 'Recall@5': 0.25724358445198225} | {'NDCG@2': 0.15002129786215904, 'NDCG@5': 0.18921654577549277}
+2026-04-04 03:55:51,381 - INFO - Best model saved (NDCG=0.1892) to ./ckpt/tiger.pth
+2026-04-04 03:58:00,692 - INFO - Epoch 9/100, Training loss: 1.3165
+2026-04-04 04:08:05,852 - INFO - Test: {'Recall@2': 0.1763353614640939, 'Recall@5': 0.26483281687820887} | {'NDCG@2': 0.15501262093756857, 'NDCG@5': 0.1949294336519676}
+2026-04-04 04:08:05,862 - INFO - Best model saved (NDCG=0.1949) to ./ckpt/tiger.pth
+2026-04-04 04:10:10,950 - INFO - Epoch 10/100, Training loss: 1.3083
+2026-04-04 04:20:17,821 - INFO - Test: {'Recall@2': 0.17567893730890974, 'Recall@5': 0.2671996064224448} | {'NDCG@2': 0.15486137083564303, 'NDCG@5': 0.19618760666562787}
+2026-04-04 04:20:17,831 - INFO - Best model saved (NDCG=0.1962) to ./ckpt/tiger.pth
+2026-04-04 04:22:25,894 - INFO - Epoch 11/100, Training loss: 1.3014
+2026-04-04 04:32:24,888 - INFO - Test: {'Recall@2': 0.17785053222812214, 'Recall@5': 0.26835514760848345} | {'NDCG@2': 0.15733304681710839, 'NDCG@5': 0.19824994407374483}
+2026-04-04 04:32:24,895 - INFO - Best model saved (NDCG=0.1982) to ./ckpt/tiger.pth
+2026-04-04 04:34:29,110 - INFO - Epoch 12/100, Training loss: 1.2947
+2026-04-04 04:44:30,378 - INFO - Test: {'Recall@2': 0.1808909077107427, 'Recall@5': 0.27075313539032003} | {'NDCG@2': 0.15941882473054583, 'NDCG@5': 0.20000375383820673}
+2026-04-04 04:44:30,386 - INFO - Best model saved (NDCG=0.2000) to ./ckpt/tiger.pth
+2026-04-04 04:46:38,947 - INFO - Epoch 13/100, Training loss: 1.2886
+2026-04-04 04:56:49,093 - INFO - Test: {'Recall@2': 0.18380917688636933, 'Recall@5': 0.2741533597736512} | {'NDCG@2': 0.16221604090753253, 'NDCG@5': 0.20298869196754998}
+2026-04-04 04:56:49,103 - INFO - Best model saved (NDCG=0.2030) to ./ckpt/tiger.pth
+2026-04-04 04:58:51,341 - INFO - Epoch 14/100, Training loss: 1.2842
+2026-04-04 05:08:52,701 - INFO - Test: {'Recall@2': 0.18526507646404705, 'Recall@5': 0.2770333028031418} | {'NDCG@2': 0.16338066281326336, 'NDCG@5': 0.2046767638811477}
+2026-04-04 05:08:52,714 - INFO - Best model saved (NDCG=0.2047) to ./ckpt/tiger.pth
+2026-04-04 05:10:57,730 - INFO - Epoch 15/100, Training loss: 1.2790
+2026-04-04 05:20:58,757 - INFO - Test: {'Recall@2': 0.18511489724825278, 'Recall@5': 0.27620597371467} | {'NDCG@2': 0.16343919846950844, 'NDCG@5': 0.2044673908012482}
+2026-04-04 05:23:07,025 - INFO - Epoch 16/100, Training loss: 1.2750
+2026-04-04 05:33:07,916 - INFO - Test: {'Recall@2': 0.1881064740646301, 'Recall@5': 0.27809080801125186} | {'NDCG@2': 0.16611515289177523, 'NDCG@5': 0.20664680371655217}
+2026-04-04 05:33:07,929 - INFO - Best model saved (NDCG=0.2066) to ./ckpt/tiger.pth
+2026-04-04 05:35:16,147 - INFO - Epoch 17/100, Training loss: 1.2706
+2026-04-04 05:45:17,044 - INFO - Test: {'Recall@2': 0.1895064471074787, 'Recall@5': 0.28265704610072895} | {'NDCG@2': 0.16675107177077286, 'NDCG@5': 0.20883938278653347}
+2026-04-04 05:45:17,053 - INFO - Best model saved (NDCG=0.2088) to ./ckpt/tiger.pth
+2026-04-04 05:47:21,070 - INFO - Epoch 18/100, Training loss: 1.2670
+2026-04-04 05:57:22,146 - INFO - Test: {'Recall@2': 0.19118539497615825, 'Recall@5': 0.28379520622079557} | {'NDCG@2': 0.16850732123084747, 'NDCG@5': 0.21019673691038793}
+2026-04-04 05:57:22,156 - INFO - Best model saved (NDCG=0.2102) to ./ckpt/tiger.pth
+2026-04-04 05:59:31,029 - INFO - Epoch 19/100, Training loss: 1.2633
+2026-04-04 06:09:30,652 - INFO - Test: {'Recall@2': 0.19298310450031034, 'Recall@5': 0.2862667209661039} | {'NDCG@2': 0.1704661301649288, 'NDCG@5': 0.21254546408998423}
+2026-04-04 06:09:30,660 - INFO - Best model saved (NDCG=0.2125) to ./ckpt/tiger.pth
+2026-04-04 06:11:38,615 - INFO - Epoch 20/100, Training loss: 1.2603
+2026-04-04 06:21:37,605 - INFO - Test: {'Recall@2': 0.19419457218122865, 'Recall@5': 0.2875581855109166} | {'NDCG@2': 0.17153582300481465, 'NDCG@5': 0.21359344374078848}
+2026-04-04 06:21:37,617 - INFO - Best model saved (NDCG=0.2136) to ./ckpt/tiger.pth
+2026-04-04 06:23:41,261 - INFO - Epoch 21/100, Training loss: 1.2568
+2026-04-04 06:33:42,296 - INFO - Test: {'Recall@2': 0.19614936950698936, 'Recall@5': 0.2880958480106282} | {'NDCG@2': 0.17331800671748757, 'NDCG@5': 0.21478337101418596}
+2026-04-04 06:33:42,306 - INFO - Best model saved (NDCG=0.2148) to ./ckpt/tiger.pth
+2026-04-04 06:35:50,122 - INFO - Epoch 22/100, Training loss: 1.2540
+2026-04-04 06:45:48,531 - INFO - Test: {'Recall@2': 0.1972035301035275, 'Recall@5': 0.29179955615434827} | {'NDCG@2': 0.17416476743949963, 'NDCG@5': 0.21694803078117064}
+2026-04-04 06:45:48,543 - INFO - Best model saved (NDCG=0.2169) to ./ckpt/tiger.pth
+2026-04-04 06:47:55,675 - INFO - Epoch 23/100, Training loss: 1.2514
+2026-04-04 06:57:54,390 - INFO - Test: {'Recall@2': 0.19965053583437892, 'Recall@5': 0.29395333140209595} | {'NDCG@2': 0.17631802574079733, 'NDCG@5': 0.2189056628431136}
+2026-04-04 06:57:54,402 - INFO - Best model saved (NDCG=0.2189) to ./ckpt/tiger.pth
+2026-04-04 06:59:58,624 - INFO - Epoch 24/100, Training loss: 1.2490
+2026-04-04 07:10:01,026 - INFO - Test: {'Recall@2': 0.19872917338766297, 'Recall@5': 0.29435485106051446} | {'NDCG@2': 0.17581540825539554, 'NDCG@5': 0.21901198969929211}
+2026-04-04 07:10:01,037 - INFO - Best model saved (NDCG=0.2190) to ./ckpt/tiger.pth
+2026-04-04 07:12:06,441 - INFO - Epoch 25/100, Training loss: 1.2462
+2026-04-04 07:22:02,566 - INFO - Test: {'Recall@2': 0.20030005140374876, 'Recall@5': 0.29510887250823564} | {'NDCG@2': 0.1769263414770924, 'NDCG@5': 0.21974149538109194}
+2026-04-04 07:22:02,576 - INFO - Best model saved (NDCG=0.2197) to ./ckpt/tiger.pth
+2026-04-04 07:24:10,350 - INFO - Epoch 26/100, Training loss: 1.2442
+2026-04-04 07:34:05,939 - INFO - Test: {'Recall@2': 0.20289032780452965, 'Recall@5': 0.29841818886212307} | {'NDCG@2': 0.17905149061542414, 'NDCG@5': 0.22208022855561796}
+2026-04-04 07:34:05,948 - INFO - Best model saved (NDCG=0.2221) to ./ckpt/tiger.pth
+2026-04-04 07:36:09,384 - INFO - Epoch 27/100, Training loss: 1.2421
+2026-04-04 07:46:07,241 - INFO - Test: {'Recall@2': 0.201972090686614, 'Recall@5': 0.29976936327867787} | {'NDCG@2': 0.17879550003174483, 'NDCG@5': 0.2229980093304657}
+2026-04-04 07:46:07,249 - INFO - Best model saved (NDCG=0.2230) to ./ckpt/tiger.pth
+2026-04-04 07:48:11,434 - INFO - Epoch 28/100, Training loss: 1.2402
+2026-04-04 07:58:08,832 - INFO - Test: {'Recall@2': 0.20253426212088352, 'Recall@5': 0.2996191841028331} | {'NDCG@2': 0.17946581314779797, 'NDCG@5': 0.2233336018972678}
+2026-04-04 07:58:08,846 - INFO - Best model saved (NDCG=0.2233) to ./ckpt/tiger.pth
+2026-04-04 08:00:16,784 - INFO - Epoch 29/100, Training loss: 1.2379
+2026-04-04 08:10:17,095 - INFO - Test: {'Recall@2': 0.20496388678576288, 'Recall@5': 0.3013995125210637} | {'NDCG@2': 0.18132726995938586, 'NDCG@5': 0.22489936290253904}
+2026-04-04 08:10:17,104 - INFO - Best model saved (NDCG=0.2249) to ./ckpt/tiger.pth
+2026-04-04 08:12:24,935 - INFO - Epoch 30/100, Training loss: 1.2359
+2026-04-04 08:22:22,303 - INFO - Test: {'Recall@2': 0.20579812446004903, 'Recall@5': 0.3019369556181552} | {'NDCG@2': 0.18206495967451433, 'NDCG@5': 0.22554608708092738}
+2026-04-04 08:22:22,311 - INFO - Best model saved (NDCG=0.2255) to ./ckpt/tiger.pth
+2026-04-04 08:24:25,285 - INFO - Epoch 31/100, Training loss: 1.2334
+2026-04-04 08:34:19,157 - INFO - Test: {'Recall@2': 0.20577717941983456, 'Recall@5': 0.30393408170973646} | {'NDCG@2': 0.1825180254856639, 'NDCG@5': 0.22685497531782206}
+2026-04-04 08:34:19,166 - INFO - Best model saved (NDCG=0.2269) to ./ckpt/tiger.pth
+2026-04-04 08:36:22,473 - INFO - Epoch 32/100, Training loss: 1.2323
+2026-04-04 08:46:17,588 - INFO - Test: {'Recall@2': 0.20824869416514286, 'Recall@5': 0.3059517141161911} | {'NDCG@2': 0.1841882312465609, 'NDCG@5': 0.22825396628226416}
+2026-04-04 08:46:17,599 - INFO - Best model saved (NDCG=0.2283) to ./ckpt/tiger.pth
+2026-04-04 08:48:23,941 - INFO - Epoch 33/100, Training loss: 1.2305
+2026-04-04 08:58:19,743 - INFO - Test: {'Recall@2': 0.21007091266380237, 'Recall@5': 0.3056232826959032} | {'NDCG@2': 0.18592804858096484, 'NDCG@5': 0.22910513622990883}
+2026-04-04 08:58:19,753 - INFO - Best model saved (NDCG=0.2291) to ./ckpt/tiger.pth
+2026-04-04 09:00:23,163 - INFO - Epoch 34/100, Training loss: 1.2287
+2026-04-04 09:10:19,625 - INFO - Test: {'Recall@2': 0.20742136507667103, 'Recall@5': 0.3052850368035703} | {'NDCG@2': 0.18339823715728346, 'NDCG@5': 0.22760934616381617}
+2026-04-04 09:12:28,458 - INFO - Epoch 35/100, Training loss: 1.2272
+2026-04-04 09:22:32,081 - INFO - Test: {'Recall@2': 0.2093030740844021, 'Recall@5': 0.30795887400253846} | {'NDCG@2': 0.18547961625193143, 'NDCG@5': 0.23011641607847036}
+2026-04-04 09:22:32,093 - INFO - Best model saved (NDCG=0.2301) to ./ckpt/tiger.pth
+2026-04-04 09:24:40,383 - INFO - Epoch 36/100, Training loss: 1.2257
+2026-04-04 09:34:32,469 - INFO - Test: {'Recall@2': 0.2106154837093788, 'Recall@5': 0.30988581770227036} | {'NDCG@2': 0.18649835918528146, 'NDCG@5': 0.23143372031542955}
+2026-04-04 09:34:32,477 - INFO - Best model saved (NDCG=0.2314) to ./ckpt/tiger.pth
+2026-04-04 09:36:39,498 - INFO - Epoch 37/100, Training loss: 1.2245
+2026-04-04 09:46:37,116 - INFO - Test: {'Recall@2': 0.2123122512894725, 'Recall@5': 0.3100954874271362} | {'NDCG@2': 0.1881924964707275, 'NDCG@5': 0.23236302412227394}
+2026-04-04 09:46:37,129 - INFO - Best model saved (NDCG=0.2324) to ./ckpt/tiger.pth
+2026-04-04 09:48:39,870 - INFO - Epoch 38/100, Training loss: 1.2228
+2026-04-04 09:58:31,845 - INFO - Test: {'Recall@2': 0.212734716028055, 'Recall@5': 0.31098565163625147} | {'NDCG@2': 0.1881717095705843, 'NDCG@5': 0.23248021612218495}
+2026-04-04 09:58:31,856 - INFO - Best model saved (NDCG=0.2325) to ./ckpt/tiger.pth
+2026-04-04 10:00:34,241 - INFO - Epoch 39/100, Training loss: 1.2211
+2026-04-04 10:10:27,137 - INFO - Test: {'Recall@2': 0.21387265678545106, 'Recall@5': 0.3125324593632215} | {'NDCG@2': 0.1895286450037688, 'NDCG@5': 0.23405441797610582}
+2026-04-04 10:10:27,145 - INFO - Best model saved (NDCG=0.2341) to ./ckpt/tiger.pth
+2026-04-04 10:12:34,617 - INFO - Epoch 40/100, Training loss: 1.2202
+2026-04-04 10:22:28,514 - INFO - Test: {'Recall@2': 0.21569153067253868, 'Recall@5': 0.31409599010810135} | {'NDCG@2': 0.19113493904511347, 'NDCG@5': 0.23555595637486385}
+2026-04-04 10:22:28,526 - INFO - Best model saved (NDCG=0.2356) to ./ckpt/tiger.pth
+2026-04-04 10:24:31,016 - INFO - Epoch 41/100, Training loss: 1.2186
+2026-04-04 10:34:25,367 - INFO - Test: {'Recall@2': 0.2151048502238123, 'Recall@5': 0.3162464207043277} | {'NDCG@2': 0.19067975277475632, 'NDCG@5': 0.2363560321583505}
+2026-04-04 10:34:25,377 - INFO - Best model saved (NDCG=0.2364) to ./ckpt/tiger.pth
+2026-04-04 10:36:28,229 - INFO - Epoch 42/100, Training loss: 1.2176
+2026-04-04 10:46:22,464 - INFO - Test: {'Recall@2': 0.2148639822613458, 'Recall@5': 0.3161697684120557} | {'NDCG@2': 0.19096322277755584, 'NDCG@5': 0.23678077489696941}
+2026-04-04 10:46:22,476 - INFO - Best model saved (NDCG=0.2368) to ./ckpt/tiger.pth
+2026-04-04 10:48:29,620 - INFO - Epoch 43/100, Training loss: 1.2161
+2026-04-04 10:58:23,269 - INFO - Test: {'Recall@2': 0.21557611362863802, 'Recall@5': 0.3147662313949646} | {'NDCG@2': 0.19132494542937495, 'NDCG@5': 0.23622165612337098}
+2026-04-04 11:00:26,399 - INFO - Epoch 44/100, Training loss: 1.2151
+2026-04-04 11:10:24,464 - INFO - Test: {'Recall@2': 0.21570847313301814, 'Recall@5': 0.3143052211875251} | {'NDCG@2': 0.19117268468515483, 'NDCG@5': 0.2356819006297288}
+2026-04-04 11:12:32,284 - INFO - Epoch 45/100, Training loss: 1.2140
+2026-04-04 11:22:26,451 - INFO - Test: {'Recall@2': 0.21799882970770307, 'Recall@5': 0.3174681415826322} | {'NDCG@2': 0.193417812640162, 'NDCG@5': 0.238385199102256}
+2026-04-04 11:22:26,459 - INFO - Best model saved (NDCG=0.2384) to ./ckpt/tiger.pth
+2026-04-04 11:24:29,545 - INFO - Epoch 46/100, Training loss: 1.2128
+2026-04-04 11:34:23,018 - INFO - Test: {'Recall@2': 0.2174961487425556, 'Recall@5': 0.31943363079117065} | {'NDCG@2': 0.19328618137510467, 'NDCG@5': 0.2393048915003324}
+2026-04-04 11:34:23,029 - INFO - Best model saved (NDCG=0.2393) to ./ckpt/tiger.pth
+2026-04-04 11:36:30,382 - INFO - Epoch 47/100, Training loss: 1.2116
+2026-04-04 11:46:23,546 - INFO - Test: {'Recall@2': 0.21743665823348407, 'Recall@5': 0.31774755505390523} | {'NDCG@2': 0.19348310217780657, 'NDCG@5': 0.23885244286891283}
+2026-04-04 11:48:30,251 - INFO - Epoch 48/100, Training loss: 1.2113
+2026-04-04 11:58:25,504 - INFO - Test: {'Recall@2': 0.21735644204686858, 'Recall@5': 0.31805816668288} | {'NDCG@2': 0.1932933489534874, 'NDCG@5': 0.2389008971305699}
+2026-04-04 12:00:28,619 - INFO - Epoch 49/100, Training loss: 1.2099
+2026-04-04 12:10:23,976 - INFO - Test: {'Recall@2': 0.21925196818627876, 'Recall@5': 0.3189485502147163} | {'NDCG@2': 0.19494019276974348, 'NDCG@5': 0.24004785384952862}
+2026-04-04 12:10:23,984 - INFO - Best model saved (NDCG=0.2400) to ./ckpt/tiger.pth
+2026-04-04 12:12:31,362 - INFO - Epoch 50/100, Training loss: 1.2090
+2026-04-04 12:22:22,941 - INFO - Test: {'Recall@2': 0.22058197823989806, 'Recall@5': 0.32078458588500447} | {'NDCG@2': 0.19581543760069572, 'NDCG@5': 0.24119201298533433}
+2026-04-04 12:22:22,949 - INFO - Best model saved (NDCG=0.2412) to ./ckpt/tiger.pth
+2026-04-04 12:24:25,238 - INFO - Epoch 51/100, Training loss: 1.2077
+2026-04-04 12:34:19,976 - INFO - Test: {'Recall@2': 0.22141643519695578, 'Recall@5': 0.3205962998457952} | {'NDCG@2': 0.1965854222669039, 'NDCG@5': 0.2413842757170066}
+2026-04-04 12:34:19,984 - INFO - Best model saved (NDCG=0.2414) to ./ckpt/tiger.pth
+2026-04-04 12:36:22,913 - INFO - Epoch 52/100, Training loss: 1.2073
+2026-04-04 14:09:30,172 - INFO - Configuration: {'code_path': '../data/course/course_rqvae_codes.npy', 'train_dataset_path': '../data/tiger/train_dataset.h5', 'test_dataset_path': '../data/tiger/test_dataset.h5', 'batch_size': 256, 'infer_size': 256, 'num_epochs': 100, 'lr': 0.0001, 'device': 'cuda:0', 'num_layers': 2, 'num_decoder_layers': 2, 'd_model': 64, 'd_ff': 256, 'num_heads': 4, 'd_kv': 16, 'dropout_rate': 0.1, 'vocab_size': 64, 'codebook_size': 8, 'pad_token_id': 0, 'eos_token_id': 31, 'feed_forward_proj': 'relu', 'max_len': 20, 'log_path': './logs/tiger.log', 'seed': 42, 'save_path': './ckpt/tiger.pth', 'early_stop': 5, 'topk_list': [2, 5], 'loss_plot_path': './loss_picture/task1.png', 'beam_size': 5, 'eval_freq': 1}
+2026-04-04 14:09:30,181 - INFO - #Embedding parameters: 4096
+#Non-embedding parameters: 230400
+#Total trainable parameters: 234496
+
+2026-04-04 14:09:31,230 - INFO - 使用设备: cuda:0
+2026-04-04 14:12:24,345 - INFO - Epoch 1/100, Training loss: 1.9804, Val loss: 1.4694
+2026-04-04 14:12:24,361 - INFO - Best model saved (val_loss=1.4694) to ./ckpt/tiger.pth
+2026-04-04 14:15:09,379 - INFO - Epoch 2/100, Training loss: 1.5238, Val loss: 1.3411
+2026-04-04 14:15:09,387 - INFO - Best model saved (val_loss=1.3411) to ./ckpt/tiger.pth
+2026-04-04 14:18:00,734 - INFO - Epoch 3/100, Training loss: 1.4337, Val loss: 1.2886
+2026-04-04 14:18:00,745 - INFO - Best model saved (val_loss=1.2886) to ./ckpt/tiger.pth
+2026-04-04 14:20:41,111 - INFO - Epoch 4/100, Training loss: 1.3911, Val loss: 1.2606
+2026-04-04 14:20:41,120 - INFO - Best model saved (val_loss=1.2606) to ./ckpt/tiger.pth
+2026-04-04 14:23:22,628 - INFO - Epoch 5/100, Training loss: 1.3652, Val loss: 1.2427
+2026-04-04 14:23:22,636 - INFO - Best model saved (val_loss=1.2427) to ./ckpt/tiger.pth
+2026-04-04 14:26:07,782 - INFO - Epoch 6/100, Training loss: 1.3480, Val loss: 1.2310
+2026-04-04 14:26:07,790 - INFO - Best model saved (val_loss=1.2310) to ./ckpt/tiger.pth
+2026-04-04 14:28:48,956 - INFO - Epoch 7/100, Training loss: 1.3349, Val loss: 1.2218
+2026-04-04 14:28:48,964 - INFO - Best model saved (val_loss=1.2218) to ./ckpt/tiger.pth
+2026-04-04 14:31:34,005 - INFO - Epoch 8/100, Training loss: 1.3237, Val loss: 1.2137
+2026-04-04 14:31:34,011 - INFO - Best model saved (val_loss=1.2137) to ./ckpt/tiger.pth
+2026-04-04 14:34:18,912 - INFO - Epoch 9/100, Training loss: 1.3150, Val loss: 1.2073
+2026-04-04 14:34:18,919 - INFO - Best model saved (val_loss=1.2073) to ./ckpt/tiger.pth
+2026-04-04 14:37:03,806 - INFO - Epoch 10/100, Training loss: 1.3072, Val loss: 1.2025
+2026-04-04 14:37:03,815 - INFO - Best model saved (val_loss=1.2025) to ./ckpt/tiger.pth
+2026-04-04 14:39:45,906 - INFO - Epoch 11/100, Training loss: 1.3002, Val loss: 1.1967
+2026-04-04 14:39:45,914 - INFO - Best model saved (val_loss=1.1967) to ./ckpt/tiger.pth
+2026-04-04 14:42:28,228 - INFO - Epoch 12/100, Training loss: 1.2943, Val loss: 1.1920
+2026-04-04 14:42:28,235 - INFO - Best model saved (val_loss=1.1920) to ./ckpt/tiger.pth
+2026-04-04 14:45:13,814 - INFO - Epoch 13/100, Training loss: 1.2886, Val loss: 1.1880
+2026-04-04 14:45:13,820 - INFO - Best model saved (val_loss=1.1880) to ./ckpt/tiger.pth
+2026-04-04 14:47:59,069 - INFO - Epoch 14/100, Training loss: 1.2837, Val loss: 1.1815
+2026-04-04 14:47:59,077 - INFO - Best model saved (val_loss=1.1815) to ./ckpt/tiger.pth
+2026-04-04 14:50:44,070 - INFO - Epoch 15/100, Training loss: 1.2791, Val loss: 1.1791
+2026-04-04 14:50:44,078 - INFO - Best model saved (val_loss=1.1791) to ./ckpt/tiger.pth
+2026-04-04 14:53:28,668 - INFO - Epoch 16/100, Training loss: 1.2747, Val loss: 1.1738
+2026-04-04 14:53:28,676 - INFO - Best model saved (val_loss=1.1738) to ./ckpt/tiger.pth
+2026-04-04 14:56:10,088 - INFO - Epoch 17/100, Training loss: 1.2704, Val loss: 1.1696
+2026-04-04 14:56:10,095 - INFO - Best model saved (val_loss=1.1696) to ./ckpt/tiger.pth
+2026-04-04 14:58:51,265 - INFO - Epoch 18/100, Training loss: 1.2667, Val loss: 1.1670
+2026-04-04 14:58:51,274 - INFO - Best model saved (val_loss=1.1670) to ./ckpt/tiger.pth
+2026-04-04 15:01:31,861 - INFO - Epoch 19/100, Training loss: 1.2634, Val loss: 1.1629
+2026-04-04 15:01:31,868 - INFO - Best model saved (val_loss=1.1629) to ./ckpt/tiger.pth
+2026-04-04 15:04:16,771 - INFO - Epoch 20/100, Training loss: 1.2600, Val loss: 1.1598
+2026-04-04 15:04:16,779 - INFO - Best model saved (val_loss=1.1598) to ./ckpt/tiger.pth
+2026-04-04 15:07:00,214 - INFO - Epoch 21/100, Training loss: 1.2569, Val loss: 1.1564
+2026-04-04 15:07:00,221 - INFO - Best model saved (val_loss=1.1564) to ./ckpt/tiger.pth
+2026-04-04 15:09:41,379 - INFO - Epoch 22/100, Training loss: 1.2541, Val loss: 1.1536
+2026-04-04 15:09:41,387 - INFO - Best model saved (val_loss=1.1536) to ./ckpt/tiger.pth
+2026-04-04 15:12:21,890 - INFO - Epoch 23/100, Training loss: 1.2514, Val loss: 1.1507
+2026-04-04 15:12:21,898 - INFO - Best model saved (val_loss=1.1507) to ./ckpt/tiger.pth
+2026-04-04 15:15:03,422 - INFO - Epoch 24/100, Training loss: 1.2490, Val loss: 1.1473
+2026-04-04 15:15:03,432 - INFO - Best model saved (val_loss=1.1473) to ./ckpt/tiger.pth
+2026-04-04 15:17:48,177 - INFO - Epoch 25/100, Training loss: 1.2463, Val loss: 1.1449
+2026-04-04 15:17:48,185 - INFO - Best model saved (val_loss=1.1449) to ./ckpt/tiger.pth
+2026-04-04 15:20:34,582 - INFO - Epoch 26/100, Training loss: 1.2442, Val loss: 1.1423
+2026-04-04 15:20:34,593 - INFO - Best model saved (val_loss=1.1423) to ./ckpt/tiger.pth
+2026-04-04 15:23:18,015 - INFO - Epoch 27/100, Training loss: 1.2418, Val loss: 1.1393
+2026-04-04 15:23:18,025 - INFO - Best model saved (val_loss=1.1393) to ./ckpt/tiger.pth
+2026-04-04 15:25:59,012 - INFO - Epoch 28/100, Training loss: 1.2397, Val loss: 1.1382
+2026-04-04 15:25:59,020 - INFO - Best model saved (val_loss=1.1382) to ./ckpt/tiger.pth
+2026-04-04 15:28:44,136 - INFO - Epoch 29/100, Training loss: 1.2381, Val loss: 1.1344
+2026-04-04 15:28:44,143 - INFO - Best model saved (val_loss=1.1344) to ./ckpt/tiger.pth
+2026-04-04 15:31:25,405 - INFO - Epoch 30/100, Training loss: 1.2354, Val loss: 1.1328
+2026-04-04 15:31:25,413 - INFO - Best model saved (val_loss=1.1328) to ./ckpt/tiger.pth
+2026-04-04 15:31:54,207 - INFO - Configuration: {'code_path': '../data/course/course_rqvae_codes.npy', 'train_dataset_path': '../data/tiger/train_dataset.h5', 'test_dataset_path': '../data/tiger/test_dataset.h5', 'batch_size': 256, 'infer_size': 256, 'num_epochs': 100, 'lr': 0.001, 'device': 'cuda:0', 'num_layers': 2, 'num_decoder_layers': 2, 'd_model': 64, 'd_ff': 256, 'num_heads': 4, 'd_kv': 16, 'dropout_rate': 0.1, 'vocab_size': 64, 'codebook_size': 8, 'pad_token_id': 0, 'eos_token_id': 31, 'feed_forward_proj': 'relu', 'max_len': 20, 'log_path': './logs/tiger.log', 'seed': 42, 'save_path': './ckpt/tiger.pth', 'early_stop': 5, 'topk_list': [2, 5], 'loss_plot_path': './loss_picture/task1.png', 'beam_size': 5}
+2026-04-04 15:31:54,215 - INFO - #Embedding parameters: 4096
+#Non-embedding parameters: 230400
+#Total trainable parameters: 234496
+
+2026-04-04 15:31:55,244 - INFO - 使用设备: cuda:0
+2026-04-04 15:34:50,153 - INFO - Epoch 1/100, Training loss: 1.4695, Val loss: 1.2394
+2026-04-04 15:34:50,162 - INFO - Best model saved (val_loss=1.2394) to ./ckpt/tiger.pth
+2026-04-04 15:37:31,520 - INFO - Epoch 2/100, Training loss: 1.3123, Val loss: 1.2013
+2026-04-04 15:37:31,527 - INFO - Best model saved (val_loss=1.2013) to ./ckpt/tiger.pth
+2026-04-04 15:40:16,723 - INFO - Epoch 3/100, Training loss: 1.2782, Val loss: 1.1721
+2026-04-04 15:40:16,730 - INFO - Best model saved (val_loss=1.1721) to ./ckpt/tiger.pth
+2026-04-04 15:42:57,047 - INFO - Epoch 4/100, Training loss: 1.2561, Val loss: 1.1503
+2026-04-04 15:42:57,054 - INFO - Best model saved (val_loss=1.1503) to ./ckpt/tiger.pth
+2026-04-04 15:45:41,657 - INFO - Epoch 5/100, Training loss: 1.2405, Val loss: 1.1409
+2026-04-04 15:45:41,665 - INFO - Best model saved (val_loss=1.1409) to ./ckpt/tiger.pth
+2026-04-04 15:48:27,219 - INFO - Epoch 6/100, Training loss: 1.2295, Val loss: 1.1268
+2026-04-04 15:48:27,229 - INFO - Best model saved (val_loss=1.1268) to ./ckpt/tiger.pth
+2026-04-04 15:51:10,898 - INFO - Epoch 7/100, Training loss: 1.2215, Val loss: 1.1182
+2026-04-04 15:51:10,905 - INFO - Best model saved (val_loss=1.1182) to ./ckpt/tiger.pth
+2026-04-04 15:53:55,297 - INFO - Epoch 8/100, Training loss: 1.2144, Val loss: 1.1145
+2026-04-04 15:53:55,304 - INFO - Best model saved (val_loss=1.1145) to ./ckpt/tiger.pth
+2026-04-04 15:56:44,058 - INFO - Epoch 9/100, Training loss: 1.2089, Val loss: 1.1037
+2026-04-04 15:56:44,067 - INFO - Best model saved (val_loss=1.1037) to ./ckpt/tiger.pth
+2026-04-04 15:59:27,204 - INFO - Epoch 10/100, Training loss: 1.2039, Val loss: 1.1015
+2026-04-04 15:59:27,212 - INFO - Best model saved (val_loss=1.1015) to ./ckpt/tiger.pth
+2026-04-04 16:02:08,789 - INFO - Epoch 11/100, Training loss: 1.2006, Val loss: 1.0958
+2026-04-04 16:02:08,800 - INFO - Best model saved (val_loss=1.0958) to ./ckpt/tiger.pth
+2026-04-04 16:04:53,621 - INFO - Epoch 12/100, Training loss: 1.1968, Val loss: 1.0923
+2026-04-04 16:04:53,629 - INFO - Best model saved (val_loss=1.0923) to ./ckpt/tiger.pth
+2026-04-04 16:07:34,827 - INFO - Epoch 13/100, Training loss: 1.1933, Val loss: 1.0869
+2026-04-04 16:07:34,835 - INFO - Best model saved (val_loss=1.0869) to ./ckpt/tiger.pth
+2026-04-04 16:10:20,754 - INFO - Epoch 14/100, Training loss: 1.1905, Val loss: 1.0826
+2026-04-04 16:10:20,762 - INFO - Best model saved (val_loss=1.0826) to ./ckpt/tiger.pth
+2026-04-04 16:13:05,102 - INFO - Epoch 15/100, Training loss: 1.1877, Val loss: 1.0804
+2026-04-04 16:13:05,110 - INFO - Best model saved (val_loss=1.0804) to ./ckpt/tiger.pth
+2026-04-04 16:15:50,317 - INFO - Epoch 16/100, Training loss: 1.1856, Val loss: 1.0789
+2026-04-04 16:15:50,328 - INFO - Best model saved (val_loss=1.0789) to ./ckpt/tiger.pth
+2026-04-04 16:18:31,501 - INFO - Epoch 17/100, Training loss: 1.1841, Val loss: 1.0758
+2026-04-04 16:18:31,509 - INFO - Best model saved (val_loss=1.0758) to ./ckpt/tiger.pth
+2026-04-04 16:21:11,634 - INFO - Epoch 18/100, Training loss: 1.1818, Val loss: 1.0746
+2026-04-04 16:21:11,642 - INFO - Best model saved (val_loss=1.0746) to ./ckpt/tiger.pth
+2026-04-04 16:23:55,048 - INFO - Epoch 19/100, Training loss: 1.1798, Val loss: 1.0726
+2026-04-04 16:23:55,059 - INFO - Best model saved (val_loss=1.0726) to ./ckpt/tiger.pth
+2026-04-04 16:26:35,343 - INFO - Epoch 20/100, Training loss: 1.1784, Val loss: 1.0692
+2026-04-04 16:26:35,347 - INFO - Best model saved (val_loss=1.0692) to ./ckpt/tiger.pth
+2026-04-04 16:29:19,569 - INFO - Epoch 21/100, Training loss: 1.1769, Val loss: 1.0700
+2026-04-04 16:32:04,811 - INFO - Epoch 22/100, Training loss: 1.1756, Val loss: 1.0677
+2026-04-04 16:32:04,821 - INFO - Best model saved (val_loss=1.0677) to ./ckpt/tiger.pth
+2026-04-04 16:34:51,337 - INFO - Epoch 23/100, Training loss: 1.1747, Val loss: 1.0667
+2026-04-04 16:34:51,345 - INFO - Best model saved (val_loss=1.0667) to ./ckpt/tiger.pth
+2026-04-04 16:37:36,544 - INFO - Epoch 24/100, Training loss: 1.1730, Val loss: 1.0638
+2026-04-04 16:37:36,550 - INFO - Best model saved (val_loss=1.0638) to ./ckpt/tiger.pth
+2026-04-04 16:40:17,031 - INFO - Epoch 25/100, Training loss: 1.1715, Val loss: 1.0646
+2026-04-04 16:42:56,317 - INFO - Epoch 26/100, Training loss: 1.1709, Val loss: 1.0611
+2026-04-04 16:42:56,325 - INFO - Best model saved (val_loss=1.0611) to ./ckpt/tiger.pth
+2026-04-04 16:45:40,698 - INFO - Epoch 27/100, Training loss: 1.1694, Val loss: 1.0609
+2026-04-04 16:45:40,704 - INFO - Best model saved (val_loss=1.0609) to ./ckpt/tiger.pth
+2026-04-04 16:48:21,173 - INFO - Epoch 28/100, Training loss: 1.1690, Val loss: 1.0600
+2026-04-04 16:48:21,181 - INFO - Best model saved (val_loss=1.0600) to ./ckpt/tiger.pth
+2026-04-04 16:51:01,788 - INFO - Epoch 29/100, Training loss: 1.1676, Val loss: 1.0584
+2026-04-04 16:51:01,795 - INFO - Best model saved (val_loss=1.0584) to ./ckpt/tiger.pth
+2026-04-04 16:53:42,746 - INFO - Epoch 30/100, Training loss: 1.1669, Val loss: 1.0579
+2026-04-04 16:53:42,752 - INFO - Best model saved (val_loss=1.0579) to ./ckpt/tiger.pth
+2026-04-04 16:56:27,704 - INFO - Epoch 31/100, Training loss: 1.1659, Val loss: 1.0561
+2026-04-04 16:56:27,712 - INFO - Best model saved (val_loss=1.0561) to ./ckpt/tiger.pth
+2026-04-04 16:59:12,218 - INFO - Epoch 32/100, Training loss: 1.1649, Val loss: 1.0560
+2026-04-04 16:59:12,225 - INFO - Best model saved (val_loss=1.0560) to ./ckpt/tiger.pth
+2026-04-04 17:01:57,861 - INFO - Epoch 33/100, Training loss: 1.1644, Val loss: 1.0543
+2026-04-04 17:01:57,870 - INFO - Best model saved (val_loss=1.0543) to ./ckpt/tiger.pth
+2026-04-04 17:04:38,898 - INFO - Epoch 34/100, Training loss: 1.1645, Val loss: 1.0558
+2026-04-04 17:07:24,570 - INFO - Epoch 35/100, Training loss: 1.1636, Val loss: 1.0529
+2026-04-04 17:07:24,579 - INFO - Best model saved (val_loss=1.0529) to ./ckpt/tiger.pth
+2026-04-04 17:10:05,738 - INFO - Epoch 36/100, Training loss: 1.1621, Val loss: 1.0510
+2026-04-04 17:10:05,745 - INFO - Best model saved (val_loss=1.0510) to ./ckpt/tiger.pth
+2026-04-04 17:12:50,565 - INFO - Epoch 37/100, Training loss: 1.1616, Val loss: 1.0520
+2026-04-04 17:15:31,644 - INFO - Epoch 38/100, Training loss: 1.1611, Val loss: 1.0511
+2026-04-04 17:18:16,146 - INFO - Epoch 39/100, Training loss: 1.1602, Val loss: 1.0495
+2026-04-04 17:18:16,154 - INFO - Best model saved (val_loss=1.0495) to ./ckpt/tiger.pth
+2026-04-04 17:20:56,525 - INFO - Epoch 40/100, Training loss: 1.1604, Val loss: 1.0488
+2026-04-04 17:20:56,532 - INFO - Best model saved (val_loss=1.0488) to ./ckpt/tiger.pth
+2026-04-04 17:23:37,152 - INFO - Epoch 41/100, Training loss: 1.1595, Val loss: 1.0503
+2026-04-04 17:26:18,453 - INFO - Epoch 42/100, Training loss: 1.1587, Val loss: 1.0485
+2026-04-04 17:26:18,462 - INFO - Best model saved (val_loss=1.0485) to ./ckpt/tiger.pth
+2026-04-04 17:29:04,396 - INFO - Epoch 43/100, Training loss: 1.1589, Val loss: 1.0500
+2026-04-04 17:31:45,826 - INFO - Epoch 44/100, Training loss: 1.1580, Val loss: 1.0485
+2026-04-04 17:31:45,835 - INFO - Best model saved (val_loss=1.0485) to ./ckpt/tiger.pth
+2026-04-04 17:34:27,699 - INFO - Epoch 45/100, Training loss: 1.1576, Val loss: 1.0468
+2026-04-04 17:34:27,706 - INFO - Best model saved (val_loss=1.0468) to ./ckpt/tiger.pth
+2026-04-04 17:37:08,992 - INFO - Epoch 46/100, Training loss: 1.1572, Val loss: 1.0475
+2026-04-04 17:39:51,991 - INFO - Epoch 47/100, Training loss: 1.1565, Val loss: 1.0476
+2026-04-04 17:42:33,365 - INFO - Epoch 48/100, Training loss: 1.1563, Val loss: 1.0472
+2026-04-04 17:45:17,848 - INFO - Epoch 49/100, Training loss: 1.1555, Val loss: 1.0446
+2026-04-04 17:45:17,854 - INFO - Best model saved (val_loss=1.0446) to ./ckpt/tiger.pth
+2026-04-04 17:47:59,896 - INFO - Epoch 50/100, Training loss: 1.1554, Val loss: 1.0431
+2026-04-04 17:47:59,903 - INFO - Best model saved (val_loss=1.0431) to ./ckpt/tiger.pth
+2026-04-04 17:50:45,071 - INFO - Epoch 51/100, Training loss: 1.1548, Val loss: 1.0451
+2026-04-04 17:53:26,698 - INFO - Epoch 52/100, Training loss: 1.1547, Val loss: 1.0459
+2026-04-04 17:56:10,645 - INFO - Epoch 53/100, Training loss: 1.1543, Val loss: 1.0432
+2026-04-04 17:58:55,729 - INFO - Epoch 54/100, Training loss: 1.1538, Val loss: 1.0456
+2026-04-04 18:01:36,493 - INFO - Epoch 55/100, Training loss: 1.1534, Val loss: 1.0439
+2026-04-04 18:01:36,493 - INFO - Early stopping at epoch 55.
+2026-04-04 18:01:36,493 - INFO - Training complete. Best val_loss=1.0431

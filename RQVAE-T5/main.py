@@ -7,8 +7,8 @@ params = {
         'test_dataset_path' : '../data/tiger/test_dataset.h5',
         'batch_size':256,
         'infer_size':256,
-        'num_epochs':50,
-        'lr':1e-4,
+        'num_epochs':100,
+        'lr':1e-3,
         'device':'cuda:0',
         'num_layers':2, # encoder 层数
         'num_decoder_layers':2, # decoder 层数
@@ -27,14 +27,13 @@ params = {
         'seed':42,
         'save_path':'./ckpt/tiger.pth',
         'early_stop':5,
-        'topk_list':[2,5],
+        'topk_list':[2,5,10],
         'loss_plot_path':'./loss_picture/task1.png',
         'beam_size':5,
-        'eval_freq':2
     }
 
 def main():
-    train(params)
+    # train(params)
     infer(params)
 if __name__ == "__main__":
     main()

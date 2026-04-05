@@ -90,7 +90,7 @@ def evaluate_model(model, eval_loader, topk_list, beam_size, device):
     avg_ndcgs = {k: sum(v) / len(v) for k, v in ndcgs.items()}
     return avg_recalls, avg_ndcgs
 
-def plot_training_curves(train_losses, val_metrics=None, save_path=None, show_plot=True):
+def plot_training_curves(train_losses, val_losses=None, val_metrics=None, save_path=None, show_plot=True):
     """
     绘制训练曲线图
     
@@ -145,6 +145,8 @@ def plot_training_curves(train_losses, val_metrics=None, save_path=None, show_pl
         plt.xlabel('Epoch')
         plt.ylabel('Loss')
         plt.grid(True, alpha=0.3)
+        if val_losses:
+            plt.plot(val_losses, 'r-', linewidth=2, label='Val Loss')
         plt.legend()
     
     plt.tight_layout()

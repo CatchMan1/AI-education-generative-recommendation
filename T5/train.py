@@ -160,7 +160,7 @@ def train(params):
 
     # Train the model
     model.to(device)
-    best_recall = -1.0
+    best_val_loss = float('inf')
     no_improve = 0
     patience = params.get('early_stop', 10)
     train_losses = []
@@ -173,29 +173,22 @@ def train(params):
         logging.info(f"Training loss: {train_loss} | Val loss: {val_loss}")
         train_losses.append(train_loss)
         val_losses.append(val_loss)
-        avg_recalls, avg_ndcgs = evaluate(model, test_dataloader, train_dataset.item_embs, params, device)
-        topk_list = params['topk_list']
-        top_k = topk_list[-1]
-        cur_recall = avg_recalls.get(f'Recall@{top_k}', 0)
         print(f"Epoch {epoch + 1}/{params['num_epochs']} | Train Loss: {train_loss:.4f} | Val Loss: {val_loss:.4f}")
-        for k in topk_list:
-            print(f"  Recall@{k}: {avg_recalls.get(f'Recall@{k}', 0):.4f}  NDCG@{k}: {avg_ndcgs.get(f'NDCG@{k}', 0):.4f}")
-        logging.info(f"Test: {avg_recalls} | {avg_ndcgs}")
-        if cur_recall > best_recall:
-            best_recall = cur_recall
+        if val_loss < best_val_loss:
+            best_val_loss = val_loss
             no_improve = 0
             torch.save(model.state_dict(), save_path)
-            logging.info(f"Best model saved (Recall@{top_k}={best_recall:.4f}) to {save_path}")
-            print(f"  >> Best model saved (Recall@{top_k}={best_recall:.4f})")
+            logging.info(f"Best model saved (val_loss={best_val_loss:.4f}) to {save_path}")
+            print(f"  >> Best model saved (val_loss={best_val_loss:.4f})")
         else:
             no_improve += 1
             if no_improve >= patience:
-                print(f"早停：Epoch {epoch + 1}，Recall@{top_k} 连续 {patience} 次未提升")
+                print(f"早停：Epoch {epoch + 1}，val_loss 连续 {patience} 次未降低")
                 logging.info(f"Early stopping at epoch {epoch + 1}.")
                 break
 
     print(f"训练完成，最优模型已保存至 {save_path}")
-    logging.info(f"Training complete. Best Recall@{top_k}={best_recall:.4f}")
+    logging.info(f"Training complete. Best val_loss={best_val_loss:.4f}")
 
     # 绘制并保存 loss 曲线
     epochs = list(range(1, len(train_losses) + 1))
