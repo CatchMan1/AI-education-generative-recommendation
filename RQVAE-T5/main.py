@@ -27,7 +27,7 @@ params = {
         'seed':42,
         'save_path':'./ckpt/tiger.pth',
         'early_stop':5,
-        'topk_list':[2,5,10],
+        'topk_list':[2,5,10,20],
         'loss_plot_path':'./loss_picture/task1.png',
         'beam_size':5,
     }
