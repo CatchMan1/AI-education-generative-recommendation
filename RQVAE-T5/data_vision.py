@@ -1,4 +1,3 @@
-import pandas as pd
 import numpy as np
 import torch
 from torch.utils.data import Dataset, DataLoader
@@ -9,16 +8,26 @@ def process_data(file_path, max_len, PAD_TOKEN=0, code_dim=4):
     with h5py.File(file_path, 'r') as f:
         # 1. 提取所有 history (变长一维数组，每 code_dim 个整数为一个 item 的语义码)
         # 2. 提取所有 target (shape: (N, code_dim) 的语义码数组)
+        # 3. 提取 user_id (如果存在)
         histories = f['history'][:]
         targets = f['target'][:]
+        user_ids = f['user_id'][:] if 'user_id' in f else None
 
     pad_code = [PAD_TOKEN] * code_dim
     # 将数据打包成字典格式，history 还原为 list of code lists
-    for h, t in zip(histories, targets):
-        processed_data.append({
-            'history': h.reshape(-1, code_dim).tolist(),  # list of [c0,c1,c2,c3]
-            'target': t.tolist()                          # [c0,c1,c2,c3]
-        })
+    if user_ids is not None:
+        for uid, h, t in zip(user_ids, histories, targets):
+            processed_data.append({
+                'user_id': int(uid),
+                'history': h.reshape(-1, code_dim).tolist(),  # list of [c0,c1,c2,c3]
+                'target': t.tolist()                          # [c0,c1,c2,c3]
+            })
+    else:
+        for h, t in zip(histories, targets):
+            processed_data.append({
+                'history': h.reshape(-1, code_dim).tolist(),
+                'target': t.tolist()
+            })
 
     # Apply padding or truncation
     for item in processed_data:
@@ -50,44 +59,18 @@ def pad_or_truncate(sequence, max_len, PAD_TOKEN=0):
             padding = [PAD_TOKEN] * pad_len
         return padding + sequence
     
-def item2code(code_path, codebook_size):
-    """
-    Convert itemID to code
-    :param code_path: npy file path to store rqvae codes
-    :return: dict item_to_code, code_to_item
-    """
-    data = np.load(code_path, allow_pickle=True)
-    item_to_code = {}
-    code_to_item = {}
-    
-    # for index, code in enumerate(data):
-    #     item_to_code[index + 1] = code
-    #     code_to_item[tuple(code)] = index + 1
-    for index, code in enumerate(data):
-        offsets = [c + i * codebook_size + 1 for i,c in enumerate(code)]
-        item_to_code[index + 1] = offsets
-        code_to_item[tuple(offsets)] = index + 1
-
-    return item_to_code, code_to_item
-
 class GenRecDataset(Dataset):
-    def __init__(self, dataset_path, code_path, max_len, PAD_TOKEN=0, codebook_size=8):
+    def __init__(self, dataset_path, max_len, PAD_TOKEN=0):
         """
         Initialize the GenRecDataset.
         Args:
             dataset_path (str): Path to the dataset file.
-            code_path (str): Path to the item-to-code mapping file.
             max_len (int): Maximum length for padding or truncation.
             PAD_TOKEN (int, optional): Token used for padding. Defaults to 0.
         """
         self.dataset_path = dataset_path
-        self.code_path = code_path
-        self.codebook_size = codebook_size
         self.max_len = max_len
         self.PAD_TOKEN = PAD_TOKEN
-        # Load item-to-code mapping
-        self.item_to_code, self.code_to_item = item2code(code_path, codebook_size)
-        # Process the dataset
         self.data = self._prepare_data()
         
     def _prepare_data(self):

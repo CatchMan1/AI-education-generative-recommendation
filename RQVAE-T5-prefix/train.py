@@ -119,16 +119,12 @@ def train(params):
     
     train_dataset = GenRecDataset(
         dataset_path=params['train_dataset_path'],
-        code_path=params['code_path'],
         max_len=params['max_len'],
-        codebook_size=params['codebook_size'],
         prof_h5_paths=params.get('prof_h5_paths', None),
     )
     test_dataset = GenRecDataset(
         dataset_path=params['test_dataset_path'],
-        code_path=params['code_path'],
         max_len=params['max_len'],
-        codebook_size=params['codebook_size'],
         prof_h5_paths=params.get('prof_h5_paths', None),
     )
 

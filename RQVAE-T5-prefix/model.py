@@ -2,7 +2,7 @@
 import torch
 import torch.nn as nn
 from typing import Dict, Any, Optional
-from transformers import T5ForConditionalGeneration
+from transformers import T5ForConditionalGeneration, T5Config
 
 
 class ProfessionalAdapter(nn.Module):
@@ -51,16 +51,26 @@ class ProfessionalAdapter(nn.Module):
 class TIGER(nn.Module):
     def __init__(self, config: Dict[str, Any]):
         super(TIGER, self).__init__()
-        self.model = T5ForConditionalGeneration.from_pretrained(config.get('pretrained_path', 't5-small'))
-        self.model.config.pad_token_id = config['pad_token_id']
-        self.model.config.eos_token_id = config['eos_token_id']
-        self.model.config.decoder_start_token_id = config['pad_token_id']
-        self.model.resize_token_embeddings(config['vocab_size'])
+        t5_config = T5Config(
+            vocab_size=config['vocab_size'],
+            num_layers=config['num_layers'],
+            num_decoder_layers=config['num_decoder_layers'],
+            d_model=config['d_model'],
+            d_ff=config['d_ff'],
+            num_heads=config['num_heads'],
+            d_kv=config['d_kv'],
+            dropout_rate=config['dropout_rate'],
+            feed_forward_proj=config['feed_forward_proj'],
+            pad_token_id=config['pad_token_id'],
+            eos_token_id=config['eos_token_id'],
+            decoder_start_token_id=config['pad_token_id'],
+        )
+        self.model = T5ForConditionalGeneration(t5_config)
 
         bert_dim = config.get('bert_dim', 768)
         dropout_rate = config['dropout_rate']
-        d_model = self.model.config.d_model
-        num_heads = self.model.config.num_heads
+        d_model = config['d_model']
+        num_heads = config['num_heads']
 
         self.adapter_lvl1 = ProfessionalAdapter(d_model, bert_dim, num_heads, dropout_rate)
         self.adapter_lvl2 = ProfessionalAdapter(d_model, bert_dim, num_heads, dropout_rate)
