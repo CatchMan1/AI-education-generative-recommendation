@@ -1,14 +1,21 @@
 import torch
-from transformers import T5EncoderModel
+from transformers import T5EncoderModel, T5Config
 from typing import Optional, Dict, Any
 import torch.nn as nn
 import torch.nn.functional as F
 class TIGER(nn.Module):
     def __init__(self, params: Dict[str, Any]):
         super(TIGER, self).__init__()
-        self.model = T5EncoderModel.from_pretrained(params.get('pretrained_path', 't5-small'))
-        self.input_proj = nn.Linear(params['input_emb_dim'], self.model.config.d_model)
-        self.output_proj = nn.Linear(self.model.config.d_model, params['target_emb_dim'])
+        t5_config = T5Config(
+            d_model=params['d_model'],
+            d_ff=params['d_ff'],
+            num_heads=params['num_heads'],
+            d_kv=params['d_kv'],
+            dropout_rate=params['dropout_rate'],
+        )
+        self.model = T5EncoderModel(t5_config)
+        self.input_proj = nn.Linear(params['input_emb_dim'], params['d_model'])
+        self.output_proj = nn.Linear(params['d_model'], params['target_emb_dim'])
         self.cosine_eps = 1e-8
         self.temperature = float(params.get('temperature', 0.07))
     

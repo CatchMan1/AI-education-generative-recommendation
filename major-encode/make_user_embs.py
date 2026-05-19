@@ -61,7 +61,10 @@ def main(params):
     print("item_embs:", embeddings[:10])
     user_item_emb = defaultdict(list)
     for (user_id, item_lists) in rec_data:
-        user_item_emb[user_id] = embeddings[item_lists]    
+        if len(item_lists) >= 2:
+            user_item_emb[user_id] = embeddings[item_lists[:-1]]
+        else:
+            user_item_emb[user_id] = embeddings[item_lists]    
     print("user_item_emb:", user_item_emb[1][:])
     output_dir = params["output_dir"]
     save_user_item_emb(user_item_emb, output_dir)

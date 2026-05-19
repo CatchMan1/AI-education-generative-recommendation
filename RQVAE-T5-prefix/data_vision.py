@@ -6,30 +6,25 @@ def process_data(file_path, max_len, PAD_TOKEN=0, code_dim=4):
 
     processed_data = []
     with h5py.File(file_path, 'r') as f:
-        # 1. 提取所有 history (变长一维数组，每 code_dim 个整数为一个 item 的语义码)
-        # 2. 提取所有 target (shape: (N, code_dim) 的语义码数组)
-        # 3. 提取 user_id (如果存在)
         histories = f['history'][:]
         targets = f['target'][:]
         user_ids = f['user_id'][:] if 'user_id' in f else None
 
     pad_code = [PAD_TOKEN] * code_dim
-    # 将数据打包成字典格式，history 还原为 list of code lists
     if user_ids is not None:
         for uid, h, t in zip(user_ids, histories, targets):
             processed_data.append({
                 'user_id': int(uid),
-                'history': h.reshape(-1, code_dim).tolist(),  # list of [c0,c1,c2,c3]
-                'target': t.tolist()                          # [c0,c1,c2,c3]
+                'history': h.reshape(-1, code_dim).tolist(),
+                'target': t.reshape(-1, code_dim).tolist()    # list of [c0,c1,c2,c3]
             })
     else:
         for h, t in zip(histories, targets):
             processed_data.append({
                 'history': h.reshape(-1, code_dim).tolist(),
-                'target': t.tolist()
+                'target': t.reshape(-1, code_dim).tolist()
             })
 
-    # Apply padding or truncation
     for item in processed_data:
         item['history'] = pad_or_truncate(item['history'], max_len, pad_code)
 
@@ -150,36 +145,30 @@ class GenRecDataLoader(DataLoader):
     
             
     def collate_fn(self, batch, pad_token=0):
-        """
-        crate attention mask for input sequence.
-        
-        Args:
-            batch (list): List of samples from the dataset.
-        
-        Returns:
-            dict: Batched data with padded sequences.
-        """
-        # Assuming each item in batch is a dictionary with 'history' and 'target'
         histories = [item['history'] for item in batch]
         targets = [item['target'] for item in batch]
 
-        # Flatten histories and targets
         flattened_histories = torch.stack(
             [torch.tensor([elem for sublist in history for elem in sublist], dtype=torch.int64) for history in histories]
         )
-        flattened_targets = torch.stack(
-            [torch.tensor(target, dtype=torch.int64) for target in targets]
-        )
 
-        # Create attention masks for flattened histories
+        flat_targets = [
+            [c for code_list in t for c in code_list] for t in targets
+        ]
+        max_target_len = max(len(ft) for ft in flat_targets)
+        padded_targets = torch.stack([
+            torch.tensor(ft + [-100] * (max_target_len - len(ft)), dtype=torch.int64)
+            for ft in flat_targets
+        ])
+
         attention_masks = torch.stack(
             [torch.tensor([1 if elem != pad_token else 0 for elem in h], dtype=torch.int64) for h in flattened_histories]
         )
 
-        result = {'history': flattened_histories, 'target': flattened_targets, 'attention_mask': attention_masks}
+        result = {'history': flattened_histories, 'target': padded_targets, 'attention_mask': attention_masks}
 
-        result['prof_lvl1'] = torch.stack([torch.tensor(item['prof_lvl1'], dtype=torch.float32) for item in batch])  # (B, 5, 768)
-        result['prof_lvl2'] = torch.stack([torch.tensor(item['prof_lvl2'], dtype=torch.float32) for item in batch])  # (B, 5, 768)
-        result['prof_lvl3'] = torch.stack([torch.tensor(item['prof_lvl3'], dtype=torch.float32) for item in batch])  # (B, 5, 768)
+        result['prof_lvl1'] = torch.stack([torch.tensor(item['prof_lvl1'], dtype=torch.float32) for item in batch])
+        result['prof_lvl2'] = torch.stack([torch.tensor(item['prof_lvl2'], dtype=torch.float32) for item in batch])
+        result['prof_lvl3'] = torch.stack([torch.tensor(item['prof_lvl3'], dtype=torch.float32) for item in batch])
 
         return result

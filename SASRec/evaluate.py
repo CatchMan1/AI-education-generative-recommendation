@@ -2,6 +2,8 @@ import torch
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 import numpy as np
+import csv
+import os
 from data_vision import SASRecDataset
 from model import SASRec
 
@@ -40,9 +42,48 @@ def evaluate(params):
                     NDCG.append(0)
 
     # 打印评估结果
-    top_k = params.get('top_k', 10)
+    top_k = params['top_k']
     hit_at_k = np.mean(HT)
     ndcg_at_k = np.mean(NDCG)
     print(f"\n>>> 评估:")
     print(f"Hit@{top_k} = {hit_at_k:.4f}, NDCG@{top_k} = {ndcg_at_k:.4f}")
-    return {f"Hit@{top_k}": hit_at_k, f"NDCG@{top_k}": ndcg_at_k}
+    
+    results = {f"Hit@{top_k}": hit_at_k, f"NDCG@{top_k}": ndcg_at_k}
+    save_results_to_csv(params, results)
+    
+    return results
+
+
+def save_results_to_csv(params, results):
+    csv_path = params['params_path']
+    
+    os.makedirs(os.path.dirname(csv_path) if os.path.dirname(csv_path) else '.', exist_ok=True)
+    
+    data = {}
+    
+    # 添加task_id
+    data['task_id'] = params['task_id']
+    
+    hyper_params = [
+        'd', 'num_blocks', 'num_heads', 'dropout', 'lr',
+        'batch_size', 'epochs', 'mlp_layer', 'max_len', 'top_k'
+    ]
+    
+    for param_name in hyper_params:
+        if param_name in params:
+            data[param_name] = params[param_name]
+    
+    for key, value in results.items():
+        data[key] = f"{value:.6f}"
+    
+    file_exists = os.path.exists(csv_path)
+    
+    with open(csv_path, 'a', newline='', encoding='utf-8') as csvfile:
+        writer = csv.writer(csvfile)
+        
+        if not file_exists:
+            writer.writerow(data.keys())
+        
+        writer.writerow(data.values())
+    
+    print(f"超参数和评估结果已保存到 {csv_path}")

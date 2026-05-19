@@ -84,6 +84,11 @@ def eval_loss(model, test_loader, item_num, params, device):
 def train(params):
     log_path = os.path.abspath(params['log_path'])
     os.makedirs(os.path.dirname(log_path), exist_ok=True)
+    
+    # 创建模型保存目录
+    ckpt_path = os.path.abspath(params['ckpt'])
+    os.makedirs(os.path.dirname(ckpt_path), exist_ok=True)
+    
     logging.basicConfig(
         filename=log_path,
         level=logging.INFO,

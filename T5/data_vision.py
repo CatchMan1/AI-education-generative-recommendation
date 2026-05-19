@@ -96,11 +96,15 @@ class EmbDataset(data.Dataset):
                 continue
             
             if mode == 'train':
-                # 滑动窗口：排除最后一个（测试目标），T5双向注意力需要逐样本构造
-                train_items = item_list[:-1]
-                for i in range(1, len(train_items)):
-                    history = train_items[max(0, i - max_seq_len):i]
-                    target = train_items[i]
+                # 滑窗策略：每个用户生成多个样本（因为是双向注意力，需要避免数据泄露）
+                # 排除最后一个（留作测试），target最高只到倒数第二个物品
+                end_idx = len(item_list) - 2
+                for i in range(1, end_idx + 1):
+                    # 历史序列：前i个item，截断到max_seq_len
+                    history = item_list[:i]
+                    history = history[-max_seq_len:] if len(history) > max_seq_len else history
+                    # 目标：第i+1个item
+                    target = item_list[i]
                     samples.append((history, target))
                     user_ids.append(user_id)
             elif mode == 'test':

@@ -3,6 +3,8 @@ import numpy as np
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 import logging
+import csv
+import os
 from model import TIGER
 from data_vision import GenRecDataset, GenRecDataLoader
 from utils import evaluate_model
@@ -42,9 +44,7 @@ def infer(params):
     logging.info("加载测试数据集...")
     test_dataset = GenRecDataset(
         dataset_path=params['test_dataset_path'],
-        code_path=params['code_path'],
         max_len=params['max_len'],
-        codebook_size=params['codebook_size'],
         prof_h5_paths=params.get('prof_h5_paths', None),
     )
     test_dataloader = GenRecDataLoader(test_dataset, batch_size=params['infer_size'], shuffle=False)
@@ -89,4 +89,67 @@ def infer(params):
     print("\n测试集评估完成！")
     logging.info("测试集评估完成！")
     
+    # 保存超参数和评估结果到CSV文件
+    save_results_to_csv(params, avg_recalls, avg_ndcgs)
+    
     return avg_recalls, avg_ndcgs
+
+
+def save_results_to_csv(params, recalls, ndcgs):
+    """
+    将超参数和评估结果追加保存到result.csv文件
+    
+    Args:
+        params: 参数字典
+        recalls: Recall字典
+        ndcgs: NDCG字典
+    """
+    # 固定文件名：result.csv
+    csv_path = params['params_path']
+    
+    # 创建目录（如果不存在）
+    os.makedirs(os.path.dirname(csv_path), exist_ok=True)
+    
+    # 准备要保存的数据
+    data = {}
+    
+    # 添加task_id
+    data['task_id'] = params['task_id']
+    
+    # 添加超参数
+    hyper_params = [
+        'd_model', 'd_ff', 'd_kv', 'num_heads', 'num_layers', 
+        'num_decoder_layers', 'dropout_rate', 'batch_size', 
+        'num_epochs', 'lr', 'beam_size', 'vocab_size', 
+        'codebook_size', 'max_len', 'bert_dim'
+    ]
+    
+    for param_name in hyper_params:
+        if param_name in params:
+            data[param_name] = params[param_name]
+    
+    # 添加评估结果
+    for k in params['topk_list']:
+        recall_key = f'Recall@{k}'
+        ndcg_key = f'NDCG@{k}'
+        if recall_key in recalls:
+            data[recall_key] = f"{recalls[recall_key]:.6f}"
+        if ndcg_key in ndcgs:
+            data[ndcg_key] = f"{ndcgs[ndcg_key]:.6f}"
+    
+    # 检查文件是否存在
+    file_exists = os.path.exists(csv_path)
+    
+    # 写入CSV文件
+    with open(csv_path, 'a', newline='', encoding='utf-8') as csvfile:
+        writer = csv.writer(csvfile)
+        
+        # 如果文件不存在，写入表头
+        if not file_exists:
+            writer.writerow(data.keys())
+        
+        # 写入数据行
+        writer.writerow(data.values())
+    
+    logging.info(f"超参数和评估结果已保存到 {csv_path}")
+    print(f"超参数和评估结果已保存到 {csv_path}")

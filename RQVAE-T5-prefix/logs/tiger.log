@@ -40,3 +40,15 @@
 #Total trainable parameters: 532096
 
 2026-05-09 17:32:56,866 - INFO - 使用设备: cuda:0
+2026-05-09 18:02:12,018 - INFO - Configuration: {'code_path': '../data/course/course_rqvae_codes.npy', 'train_dataset_path': '../data/tiger/train_dataset.h5', 'test_dataset_path': '../data/tiger/test_dataset.h5', 'batch_size': 256, 'infer_size': 256, 'num_epochs': 50, 'lr': 0.001, 'device': 'cuda:0', 'num_layers': 2, 'num_decoder_layers': 2, 'd_model': 64, 'd_ff': 256, 'num_heads': 4, 'd_kv': 16, 'dropout_rate': 0.1, 'vocab_size': 64, 'codebook_size': 8, 'pad_token_id': 0, 'eos_token_id': 31, 'feed_forward_proj': 'relu', 'max_len': 20, 'pretrained_path': '../pretrained/t5-small', 'log_path': './logs/tiger.log', 'seed': 42, 'save_path': './ckpt/tiger.pth', 'early_stop': 10, 'topk_list': [2, 5, 10], 'loss_plot_path': './loss_picture/task1.png', 'beam_size': 5, 'bert_dim': 768, 'prof_h5_paths': {'prof_lvl1': '../data/professional/prof_lvl1.h5', 'prof_lvl2': '../data/professional/prof_lvl2.h5', 'prof_lvl3': '../data/professional/prof_lvl3.h5'}}
+2026-05-09 18:02:12,064 - INFO - #Embedding parameters: 4096
+#Non-embedding parameters: 528000
+#Total trainable parameters: 532096
+
+2026-05-09 18:02:12,165 - INFO - 使用设备: cuda:0
+2026-05-10 18:05:40,447 - INFO - Configuration: {'code_path': '../data/course/course_rqvae_codes.npy', 'train_dataset_path': '../data/tiger/train_dataset.h5', 'test_dataset_path': '../data/tiger/test_dataset.h5', 'batch_size': 256, 'infer_size': 256, 'num_epochs': 50, 'lr': 0.001, 'device': 'cuda:0', 'num_layers': 2, 'num_decoder_layers': 2, 'd_model': 64, 'd_ff': 256, 'num_heads': 4, 'd_kv': 16, 'dropout_rate': 0.1, 'vocab_size': 64, 'codebook_size': 8, 'pad_token_id': 0, 'eos_token_id': 31, 'feed_forward_proj': 'relu', 'max_len': 20, 'pretrained_path': '../pretrained/t5-small', 'log_path': './logs/tiger.log', 'seed': 42, 'save_path': './ckpt/tiger.pth', 'early_stop': 10, 'topk_list': [2, 5, 10], 'loss_plot_path': './loss_picture/task1.png', 'beam_size': 5, 'bert_dim': 768, 'prof_h5_paths': {'prof_lvl1': '../data/professional/prof_lvl1.h5', 'prof_lvl2': '../data/professional/prof_lvl2.h5', 'prof_lvl3': '../data/professional/prof_lvl3.h5'}}
+2026-05-10 18:05:40,476 - INFO - #Embedding parameters: 4096
+#Non-embedding parameters: 528000
+#Total trainable parameters: 532096
+
+2026-05-10 18:05:40,575 - INFO - 使用设备: cuda:0
